@@ -242,7 +242,7 @@
         .product-image img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Bild füllt den Rahmen perfekt */
+            object-fit: cover;
             object-position: center;
             transition: transform 0.5s ease;
         }
@@ -311,6 +311,25 @@
             color: var(--white);
             padding: 3rem 5%;
             text-align: center;
+        }
+
+        /* Hier ist die spezielle Anpassung für die Goldene Umrandung */
+        footer .logo {
+            /* Textfarbe ist dunkel (identisch zum HG) */
+            color: var(--primary-color);
+            
+            /* Erzeugt eine goldene Umrandung um das Wort 'Atelier' */
+            text-shadow: 
+                -1px -1px 0 var(--accent-color),  
+                 1px -1px 0 var(--accent-color),
+                -1px  1px 0 var(--accent-color),
+                 1px  1px 0 var(--accent-color);
+        }
+
+        /* Damit 'Treueherz' normal gold bleibt und keine Umrandung bekommt */
+        footer .logo span {
+            color: var(--accent-color);
+            text-shadow: none;
         }
 
         .footer-links {
