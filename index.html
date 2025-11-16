@@ -9,25 +9,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
-        /* --- VARIABLE THEMES (Dark vs Light) --- */
+        /* --- THEMES --- */
         :root {
-            /* Standard: Dark Mode (Soundwave) */
             --bg-color: #0a0a0a;
             --text-color: #f0f0f0;
-            --accent-color: #8e44ad; /* Neon Lila für Sound */
+            --accent-color: #8e44ad; /* Neon Lila */
             --secondary-bg: #1a1a1a;
             --card-bg: rgba(255,255,255,0.05);
             --btn-text: #fff;
         }
 
-        /* Klasse für Astro Mode (Light/Gold) */
         body.astro-mode {
             --bg-color: #fdfbf7;
             --text-color: #2c3e50;
-            --accent-color: #c5a059; /* Gold für Sterne */
+            --accent-color: #c5a059; /* Gold */
             --secondary-bg: #fff;
             --card-bg: #fff;
-            --btn-text: #fff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.5s ease, color 0.3s ease; }
@@ -41,64 +38,32 @@
 
         h1, h2, h3 { font-family: 'Cinzel', serif; letter-spacing: 2px; }
 
-        /* --- FIXED SWITCHER BUTTON --- */
+        /* --- SWITCHER --- */
         .mode-switch-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 2000;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-            padding: 5px;
-            border-radius: 30px;
-            border: 1px solid rgba(255,255,255,0.2);
-            display: flex;
-            gap: 5px;
+            position: fixed; top: 20px; right: 20px; z-index: 2000;
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(10px);
+            padding: 5px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.2);
+            display: flex; gap: 5px;
         }
         body.astro-mode .mode-switch-container { background: rgba(255,255,255,0.8); border-color: #ddd; }
 
         .switch-btn {
-            padding: 8px 15px;
-            border-radius: 20px;
-            border: none;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 700;
-            background: transparent;
-            color: #888;
+            padding: 8px 15px; border-radius: 20px; border: none; cursor: pointer;
+            font-size: 0.8rem; font-weight: 700; background: transparent; color: #888;
         }
-        
-        .switch-btn.active {
-            background: var(--accent-color);
-            color: var(--btn-text);
-            box-shadow: 0 0 15px var(--accent-color);
-        }
+        .switch-btn.active { background: var(--accent-color); color: var(--btn-text); }
 
-        /* --- NAVIGATION --- */
         .brand {
-            position: fixed;
-            top: 20px;
-            left: 5%;
-            z-index: 2000;
-            font-family: 'Cinzel', serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+            position: fixed; top: 20px; left: 5%; z-index: 2000;
+            font-family: 'Cinzel', serif; font-size: 1.5rem; font-weight: 700;
+            letter-spacing: 3px; text-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
 
-        /* --- SPLIT HEADER / HERO --- */
+        /* --- HERO --- */
         .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: relative;
-            padding: 0 20px;
+            height: 100vh; display: flex; align-items: center; justify-content: center;
+            text-align: center; position: relative; padding: 0 20px;
         }
-
-        /* Hintergrundeffekte */
         .hero-bg-sound {
             position: absolute; top:0; left:0; width:100%; height:100%;
             background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
@@ -109,101 +74,63 @@
             background: radial-gradient(circle at center, #fff 0%, #f3f0ff 100%);
             z-index: -1; opacity: 0; transition: opacity 0.8s;
         }
-        
-        /* Wenn Astro Mode aktiv ist */
         body.astro-mode .hero-bg-sound { opacity: 0; }
         body.astro-mode .hero-bg-astro { opacity: 1; }
 
         .hero-content { max-width: 800px; position: relative; z-index: 10; }
         .hero h1 { font-size: 3.5rem; margin-bottom: 1rem; line-height: 1.1; }
-        .hero p { font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.8; }
         
         .cta-btn {
-            padding: 15px 40px;
-            background: var(--accent-color);
-            color: var(--btn-text);
-            border: none;
-            border-radius: 50px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            text-decoration: none;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            padding: 15px 40px; background: var(--accent-color); color: var(--btn-text);
+            border: none; border-radius: 50px; font-weight: 700; text-transform: uppercase;
+            cursor: pointer; text-decoration: none; display: inline-block; margin-top: 20px;
         }
+        .cta-btn:disabled { background: #ccc; cursor: not-allowed; }
 
-        /* --- CONTENT SECTIONS (Dynamisch) --- */
-        .content-section {
-            display: none; /* Standardmäßig ausgeblendet */
-            padding: 5rem 5%;
-        }
-        
-        .content-section.active {
-            display: block;
-            animation: fadeIn 0.8s;
-        }
-
+        /* --- SECTIONS --- */
+        .content-section { display: none; padding: 5rem 5%; }
+        .content-section.active { display: block; animation: fadeIn 0.8s; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* PRODUCT CARDS */
-        .showcase {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
-            margin-top: 3rem;
+        /* --- ASTRO TEST COMPLEX --- */
+        .astro-test {
+            background: var(--secondary-bg); padding: 3rem; border-radius: 20px;
+            margin: 3rem auto; text-align: center; border: 1px solid var(--accent-color);
+            max-width: 700px;
         }
-        .card {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
+        .input-wrapper {
+            display: flex; gap: 20px; justify-content: center; margin: 30px 0; flex-wrap: wrap;
         }
+        .date-field label { display: block; font-size: 0.9rem; margin-bottom: 8px; font-weight: 600; color: var(--accent-color); }
+        input[type="date"] { padding: 12px; border-radius: 8px; border: 1px solid #ddd; width: 160px; }
+
+        /* Processing Animation */
+        .processing-steps { margin: 20px 0; font-family: monospace; font-size: 0.9rem; color: var(--accent-color); min-height: 20px;}
+
+        /* Result Box */
+        #karma-result { display: none; margin-top: 30px; }
+        .blurred-text {
+            filter: blur(5px); user-select: none; opacity: 0.7; margin: 15px 0;
+            background: linear-gradient(to bottom, transparent, var(--bg-color));
+        }
+        .teaser-box {
+            border: 1px dashed var(--accent-color); padding: 20px; margin-top: -40px;
+            position: relative; z-index: 2; background: rgba(255,255,255,0.8);
+        }
+        body:not(.astro-mode) .teaser-box { background: rgba(0,0,0,0.8); }
+
+        /* --- SHOWCASE GRID --- */
+        .showcase { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; margin-top: 3rem; }
+        .card { background: var(--card-bg); padding: 2rem; border-radius: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
         body.astro-mode .card { border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
 
-        .card h3 { margin: 1rem 0 0.5rem; color: var(--accent-color); }
-
-        /* --- VISUALS --- */
-        /* Soundwave Visual (CSS Only) */
-        .visual-sound {
-            height: 200px;
-            display: flex; align-items: center; justify-content: center; gap: 5px;
-            background: #000; border-radius: 10px;
-        }
+        /* Visuals */
+        .visual-sound { height: 150px; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .v-bar { width: 5px; background: var(--accent-color); border-radius: 5px; animation: wave 1s infinite; }
-        @keyframes wave { 0%,100%{height:20px} 50%{height:80px} }
-        
-        /* Astro Visual */
-        .visual-astro {
-            height: 200px;
-            display: flex; align-items: center; justify-content: center;
-            background: #fdfbf7; border-radius: 10px; border: 2px solid var(--accent-color);
-            position: relative; overflow: hidden;
-        }
-        .star { position: absolute; color: var(--accent-color); font-size: 10px; }
+        @keyframes wave { 0%,100%{height:20px} 50%{height:60px} }
 
-        /* --- INTERACTIVE ASTRO TEST --- */
-        .astro-test {
-            background: var(--secondary-bg);
-            padding: 2rem;
-            border-radius: 20px;
-            margin-top: 3rem;
-            text-align: center;
-            border: 1px solid var(--accent-color);
-        }
-        .input-row { display: flex; gap: 10px; justify-content: center; margin: 20px 0; }
-        input[type="date"] { padding: 10px; border-radius: 5px; border: 1px solid #ddd; }
-
-        /* --- FOOTER --- */
-        footer {
-            text-align: center;
-            padding: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            font-size: 0.8rem;
-            opacity: 0.6;
-        }
-        body.astro-mode footer { border-top: 1px solid rgba(0,0,0,0.1); }
-
+        /* Footer */
+        footer { text-align: center; padding: 2rem; border-top: 1px solid rgba(255,255,255,0.1); opacity: 0.6; font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -232,72 +159,77 @@
         </div>
     </header>
 
-
     <section id="content-sound" class="content-section active">
-        <h2 style="text-align:center; font-size:2.5rem;">The Sound of Love</h2>
-        <p style="text-align:center; max-width:600px; margin: 1rem auto; opacity:0.7">
-            Lade eine Sprachnachricht oder ein Video hoch. Wir extrahieren die Tonspur und erstellen ein minimalistisches Kunstwerk.
-        </p>
-
+        <h2 style="text-align:center;">The Sound of Love</h2>
         <div class="showcase">
             <div class="card">
                 <div class="visual-sound">
                     <div class="v-bar" style="animation-delay:0.1s"></div>
                     <div class="v-bar" style="animation-delay:0.3s"></div>
                     <div class="v-bar" style="animation-delay:0.5s"></div>
-                    <div class="v-bar" style="animation-delay:0.2s"></div>
-                    <div class="v-bar" style="animation-delay:0.4s"></div>
                 </div>
-                <h3>Tattoo Vorlage</h3>
-                <p>Reine Linien. Perfekt für den Tätowierer.</p>
-                <br>
-                <a href="#order" class="cta-btn" style="font-size:0.8rem">Designen</a>
+                <h3>Tattoo Template</h3>
+                <p>Minimalistische Linien für die Haut.</p>
             </div>
-
             <div class="card">
-                <img src="SoundwaveArt.jpg" style="border-radius:10px; width:100%; height:200px; object-fit:cover; opacity:0.8" alt="Soundwave Print">
+                <div style="height:150px; background:#333; border-radius:10px; display:flex; align-items:center; justify-content:center;">
+                    <i class="fas fa-qrcode" style="font-size:3rem; color:var(--accent-color)"></i>
+                </div>
                 <h3>Interactive Print</h3>
-                <p>Poster mit QR-Code. Scannen & Abspielen.</p>
-                <br>
-                <a href="#order" class="cta-btn" style="font-size:0.8rem">Designen</a>
+                <p>Scannen und Stimme hören.</p>
             </div>
         </div>
     </section>
 
-
     <section id="content-astro" class="content-section">
-        <h2 style="text-align:center; font-size:2.5rem;">Die Seelen-Formel</h2>
-        <p style="text-align:center; max-width:600px; margin: 1rem auto; opacity:0.7">
-            Bist du der Löwe für deinen Widder-Hund? Berechne eure spirituelle Passung.
-        </p>
-
+        <h2 style="text-align:center;">Die Seelen-Formel</h2>
+        
         <div class="astro-test">
-            <h3>Seelenverwandten Check</h3>
-            <div class="input-row">
-                <input type="date" id="dateHuman" placeholder="Du">
-                <input type="date" id="dateDog" placeholder="Hund">
-            </div>
-            <button class="cta-btn" onclick="calculateKarma()">Berechnen</button>
-            <div id="karma-result" style="margin-top:20px; font-size:1.5rem; font-weight:bold; color:var(--accent-color)"></div>
-        </div>
-
-        <div class="showcase">
-            <div class="card">
-                <div class="visual-astro">
-                    <i class="fas fa-star star" style="top:20%; left:20%"></i>
-                    <i class="fas fa-star star" style="top:50%; left:50%; font-size:20px"></i>
-                    <i class="fas fa-star star" style="top:80%; left:70%"></i>
+            <h3><i class="fas fa-moon"></i> Seelenverwandten Check</h3>
+            <p style="opacity:0.7; font-size:0.9rem; margin-bottom:20px;">High-Precision Algorithmus basierend auf Planetenkonstellation.</p>
+            
+            <div class="input-wrapper">
+                <div class="date-field">
+                    <label>Dein Geburtstag</label>
+                    <input type="date" id="dateHuman">
                 </div>
-                <h3>Karma Chart</h3>
-                <p>Eine Analyse eurer Beziehung auf hochwertigem Papier.</p>
+                <div class="date-field">
+                    <label>Geburtstag deiner Fellnase</label>
+                    <input type="date" id="dateDog">
+                </div>
+            </div>
+
+            <div id="tech-output" class="processing-steps"></div>
+
+            <button id="calcBtn" class="cta-btn" onclick="calculateComplexKarma()">Analyse starten</button>
+
+            <div id="karma-result">
+                <div style="font-size:3rem; font-weight:800; color:var(--accent-color); margin-bottom:10px;">98.4% MATCH</div>
+                <p style="font-weight:bold;">Spiritueller Archetyp: "Der ewige Beschützer"</p>
+                
+                <div class="blurred-text">
+                    Lorem ipsum dolor sit amet, basierend auf dem Mondknoten im siebten Haus zeigt sich eine tiefe karmische Verbindung, die bereits im vorletzten Leben besiegelt wurde. Eure Energiezentren resonieren auf einer Frequenz von 432Hz, was sehr selten ist.
+                </div>
+                
+                <div class="teaser-box">
+                    <p style="font-weight:bold; color:var(--accent-color); margin-bottom:10px;">⚠️ Detaillierte Analyse erforderlich</p>
+                    <p style="font-size:0.9rem;">Die spezifische Planeten-Position zum Zeitpunkt der Geburt fehlt für den vollständigen Report. Wir benötigen genauere Daten für das Zertifikat.</p>
+                    <a href="#order" class="cta-btn" style="font-size:0.8rem; padding:10px 20px;">Vollständigen Report freischalten</a>
+                </div>
             </div>
         </div>
     </section>
 
     <section id="order" style="padding: 5rem 5%; text-align:center; background: var(--secondary-bg);">
-        <h2>Start Creation</h2>
-        <div style="background: white; padding:20px; border-radius:20px; max-width:800px; margin: 3rem auto;">
-            <script type="text/javascript" src="https://form.jotform.com/jsform/253183756171056"></script>
+        <h2 id="order-title">Start Creation</h2>
+        <p id="order-desc" style="margin-bottom:2rem; opacity:0.7;">Lade deine Audio-Datei hoch.</p>
+        
+        <div style="background: white; padding:20px; border-radius:20px; max-width:800px; margin: 0 auto; min-height: 500px;">
+            
+            <div id="form-container">
+                <script type="text/javascript" src="https://form.jotform.com/jsform/253183756171056"></script>
+            </div>
+
         </div>
     </section>
 
@@ -306,6 +238,12 @@
     </footer>
 
     <script>
+        let hasCalculated = false;
+
+        // FORMULAR URLs (Hier deine echten Links einfügen!)
+        const formSoundURL = "https://form.jotform.com/jsform/253183756171056"; // Dein Sound Formular
+        const formAstroURL = "https://form.jotform.com/jsform/PLATZHALTER_ASTRO_ID"; // Dein neues Astro Formular
+
         function switchMode(mode) {
             const body = document.body;
             const btns = document.querySelectorAll('.switch-btn');
@@ -313,40 +251,84 @@
             const heroAstro = document.getElementById('hero-astro');
             const sectionSound = document.getElementById('content-sound');
             const sectionAstro = document.getElementById('content-astro');
+            
+            // Formular Bereich
+            const orderTitle = document.getElementById('order-title');
+            const orderDesc = document.getElementById('order-desc');
+            const formContainer = document.getElementById('form-container');
 
-            // Reset Buttons
             btns.forEach(b => b.classList.remove('active'));
 
             if(mode === 'astro') {
-                // AKTIVIERE ASTRO MODE
                 body.classList.add('astro-mode');
                 btns[1].classList.add('active');
+                heroSound.style.display = 'none'; heroAstro.style.display = 'block';
+                sectionSound.classList.remove('active'); sectionAstro.classList.add('active');
                 
-                heroSound.style.display = 'none';
-                heroAstro.style.display = 'block';
+                // Formular Wechseln
+                orderTitle.innerText = "Unlock Cosmic Data";
+                orderDesc.innerText = "Erhalte deine tiefgehende astrologische Auswertung.";
+                // Hier wird das Skript ausgetauscht (simuliert durch innerHTML reset)
+                formContainer.innerHTML = `<iframe src="https://form.jotform.com/PLATZHALTER_ASTRO_ID" style="width:100%; height:500px; border:none;"></iframe>`;
                 
-                sectionSound.classList.remove('active');
-                sectionAstro.classList.add('active');
             } else {
-                // AKTIVIERE SOUND MODE
                 body.classList.remove('astro-mode');
                 btns[0].classList.add('active');
+                heroSound.style.display = 'block'; heroAstro.style.display = 'none';
+                sectionSound.classList.add('active'); sectionAstro.classList.remove('active');
 
-                heroSound.style.display = 'block';
-                heroAstro.style.display = 'none';
-
-                sectionSound.classList.add('active');
-                sectionAstro.classList.remove('active');
+                // Formular Wechseln
+                orderTitle.innerText = "Create Soundwave";
+                orderDesc.innerText = "Lade deine Audio-Datei hoch.";
+                // Zurück zum Sound Skript/Iframe
+                formContainer.innerHTML = `<iframe src="https://form.jotform.com/253183756171056" style="width:100%; height:500px; border:none;"></iframe>`;
             }
         }
 
-        function calculateKarma() {
-            const res = document.getElementById('karma-result');
-            res.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verbinde Sterne...';
-            setTimeout(() => {
-                const percent = Math.floor(Math.random() * 12) + 88; // 88-99%
-                res.innerText = percent + "% COSMIC MATCH ✨";
-            }, 1500);
+        function calculateComplexKarma() {
+            if(hasCalculated) return; // Verhindert zweiten Klick
+
+            const hDate = document.getElementById('dateHuman').value;
+            const dDate = document.getElementById('dateDog').value;
+            const btn = document.getElementById('calcBtn');
+            const output = document.getElementById('tech-output');
+
+            if(!hDate || !dDate) {
+                alert("Bitte Daten eingeben für Synchronisation.");
+                return;
+            }
+
+            hasCalculated = true;
+            btn.disabled = true;
+            btn.style.opacity = "0.5";
+            btn.innerText = "Verschlüssele Daten...";
+
+            // Fake Tech Steps
+            const steps = [
+                "Verbinde mit NASA Ephemeriden...",
+                "Berechne Mondknoten...",
+                "Analysiere Frequenz...",
+                "Synchronisation abgeschlossen."
+            ];
+
+            let i = 0;
+            let interval = setInterval(() => {
+                output.innerText = "> " + steps[i];
+                i++;
+                if(i >= steps.length) {
+                    clearInterval(interval);
+                    finishCalculation();
+                }
+            }, 800);
+        }
+
+        function finishCalculation() {
+            document.getElementById('calcBtn').style.display = 'none';
+            document.getElementById('tech-output').style.display = 'none';
+            
+            const resultBox = document.getElementById('karma-result');
+            resultBox.style.display = 'block';
+            resultBox.style.animation = "fadeIn 1s";
         }
     </script>
 
