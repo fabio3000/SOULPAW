@@ -125,14 +125,9 @@
         body.astro-mode .card { border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
 
         /* Visuals */
-<div class="visual-sound single-line-container">
-    <svg viewBox="0 0 500 100" class="waveform">
-        <path d="M0,50 Q25,50 50,50 T100,50 T150,50 T200,50 T250,50 T300,50 T350,50 T400,50 T450,50 T500,50" 
-              stroke="var(--accent-color)" 
-              fill="transparent" 
-              stroke-width="3" />
-    </svg>
-</div>
+        .visual-sound { height: 150px; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .v-bar { width: 5px; background: var(--accent-color); border-radius: 5px; animation: wave 1s infinite; }
+        @keyframes wave { 0%,100%{height:20px} 50%{height:60px} }
 
         /* Footer */
         footer { text-align: center; padding: 2rem; border-top: 1px solid rgba(255,255,255,0.1); opacity: 0.6; font-size: 0.8rem; }
@@ -335,51 +330,6 @@
             resultBox.style.display = 'block';
             resultBox.style.animation = "fadeIn 1s";
         }
-
-        /* --- NEUE SOUND WAVE (SINGLE LINE) --- */
-.visual-sound.single-line-container {
-    height: 150px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #000; /* Schwarzer Hintergrund für Kontrast */
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.waveform path {
-    /* Die Animation: Wir verändern die Form der Linie (d-Attribut) */
-    animation: bark 1.5s infinite linear;
-    vector-effect: non-scaling-stroke;
-}
-
-/* Die Bell-Animation */
-@keyframes bark {
-    0% {
-        d: path("M0,50 Q25,50 50,50 T100,50 T150,50 T200,50 T250,50 T300,50 T350,50 T400,50 T450,50 T500,50");
-    }
-    10% {
-        /* Ein kurzes Bellen (Ausschlag) */
-        d: path("M0,50 Q25,50 50,50 T100,20 T150,80 T200,10 T250,90 T300,50 T350,50 T400,50 T450,50 T500,50");
-    }
-    20% {
-        /* Ruhe */
-        d: path("M0,50 Q25,50 50,50 T100,50 T150,50 T200,50 T250,50 T300,50 T350,50 T400,50 T450,50 T500,50");
-    }
-    40% {
-        /* Ein zweites, anderes Bellen */
-        d: path("M0,50 Q25,50 50,50 T100,50 T150,50 T200,50 T250,30 T300,70 T350,40 T400,60 T450,50 T500,50");
-    }
-    60% {
-        /* Ruhe */
-        d: path("M0,50 Q25,50 50,50 T100,50 T150,50 T200,50 T250,50 T300,50 T350,50 T400,50 T450,50 T500,50");
-    }
-    100% {
-        /* Ende */
-        d: path("M0,50 Q25,50 50,50 T100,50 T150,50 T200,50 T250,50 T300,50 T350,50 T400,50 T450,50 T500,50");
-    }
-}
-
     </script>
 
 </body>
