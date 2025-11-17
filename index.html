@@ -48,7 +48,7 @@
 
         h1, h2, h3 { font-family: 'Cinzel', serif; letter-spacing: 1px; }
 
-        /* --- NEU: WELCOME MODAL --- */
+        /* --- VERBESSERTES WELCOME MODAL --- */
         .welcome-modal {
             position: fixed;
             top: 0;
@@ -62,25 +62,53 @@
             align-items: center;
             justify-content: center;
             animation: fadeIn 0.5s;
+            padding: 1rem;
         }
-        .modal-content {
+        
+        /* Neuer Wrapper für Header + Grid */
+        .modal-content-wrapper {
+            max-width: 900px;
+            width: 100%;
+            background: #222; /* Dunkler Hintergrund für den Header */
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.4);
+        }
+        
+        /* Neuer Header für das Modal */
+        .modal-header {
+            padding: 2.5rem 2rem 2rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid #444;
+        }
+        .modal-header h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+        .modal-header p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            color: #ccc;
+        }
+
+        /* Das Grid mit den Boxen */
+        .modal-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1px;
-            max-width: 900px;
-            width: 90%;
-            border-radius: 20px;
-            overflow: hidden;
-            background: #333;
+            background: #333; /* Trennlinie */
         }
+        
         .modal-choice {
-            padding: 4rem 2rem;
+            padding: 3rem 2.5rem;
             text-align: center;
             cursor: pointer;
             transition: transform 0.3s, background 0.3s;
         }
         .modal-choice:hover {
-            transform: scale(1.03);
+            transform: scale(1.02);
         }
         .modal-choice:first-child {
             background: #111;
@@ -101,11 +129,34 @@
         .modal-choice p {
             font-size: 0.9rem;
             opacity: 0.8;
+            margin-bottom: 1.5rem; /* Platz für Button */
         }
-        .modal-choice:first-child h2, .modal-choice:first-child i { color: var(--accent-color); }
-        .modal-choice:last-child h2, .modal-choice:last-child i { color: var(--accent-color); }
+        .modal-choice:first-child h2 { color: #9b59b6; }
+        .modal-choice:last-child h2 { color: #c5a059; }
+
+        /* Der neue "Fake-Button" für die Optik */
+        .modal-button-fake {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #fff;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .modal-choice:first-child .modal-button-fake {
+            background: #9b59b6;
+        }
+        .modal-choice:last-child .modal-button-fake {
+            background: #c5a059;
+        }
+
         @media (max-width: 768px) {
-            .modal-content { grid-template-columns: 1fr; }
+            .modal-grid { grid-template-columns: 1fr; }
+            .modal-content-wrapper { width: 95%; max-height: 90vh; overflow-y: auto; }
+            .modal-header h2 { font-size: 1.5rem; }
+            .modal-header p { font-size: 1rem; }
         }
 
 
@@ -345,16 +396,24 @@
 <body>
 
     <div class="welcome-modal" id="welcome-modal">
-        <div class="modal-content">
-            <div class="modal-choice" onclick="switchModeAndCloseModal('sound')">
-                <i class="fas fa-wave-square" style="color: #9b59b6;"></i>
-                <h2>Eternal Echo</h2>
-                <p>Verwandle das Bellen deines Hundes in ein minimalistisches Sound-Tattoo oder ein interaktives Poster.</p>
+        <div class="modal-content-wrapper">
+            <div class="modal-header">
+                <h2>Wähle deinen Weg</h2>
+                <p>Was möchtest du entdecken?</p>
             </div>
-            <div class="modal-choice" onclick="switchModeAndCloseModal('astro')">
-                <i class="fas fa-star" style="color: #c5a059;"></i>
-                <h2>Cosmic Bond</h2>
-                <p>Entschlüssele die astrologische Seelenverbindung zwischen dir und deinem Hund mit unserem Karma-Check.</p>
+            <div class="modal-grid">
+                <div class="modal-choice" onclick="switchModeAndCloseModal('sound')">
+                    <i class="fas fa-wave-square" style="color: #9b59b6;"></i>
+                    <h2>Eternal Echo</h2>
+                    <p>Verwandle das Bellen deines Hundes in ein minimalistisches Sound-Tattoo oder ein interaktives Poster.</p>
+                    <span class="modal-button-fake">Hier starten</span>
+                </div>
+                <div class="modal-choice" onclick="switchModeAndCloseModal('astro')">
+                    <i class="fas fa-star" style="color: #c5a059;"></i>
+                    <h2>Cosmic Bond</h2>
+                    <p>Entschlüssele die astrologische Seelenverbindung zwischen dir und deinem Hund mit unserem Karma-Check.</p>
+                    <span class="modal-button-fake">Hier starten</span>
+                </div>
             </div>
         </div>
     </div>
@@ -585,7 +644,7 @@
         const formSoundLink = "https://form.jotform.com/253195175200047"; 
         const formAstroLink = "https://form.jotform.com/253183756171056"; 
 
-        // --- NEUE START-LOGIK (Modal & Deep-Link) ---
+        // --- START-LOGIK (Modal & Deep-Link) ---
         document.addEventListener('DOMContentLoaded', () => {
             const hash = window.location.hash;
             if (hash === '#astro') {
@@ -612,7 +671,7 @@
             });
         });
 
-        // Neue Funktion, um Modal zu schließen
+        // Funktion, um Modal zu schließen
         function switchModeAndCloseModal(mode) {
             switchMode(mode);
             document.getElementById('welcome-modal').style.display = 'none';
