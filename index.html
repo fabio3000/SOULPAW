@@ -405,13 +405,13 @@
                 <div class="modal-choice" onclick="switchModeAndCloseModal('sound')">
                     <i class="fas fa-wave-square" style="color: #9b59b6;"></i>
                     <h2>Eternal Echo</h2>
-                    <p>Verwandle das Bellen deines Hundes in ein minimalistisches Sound-Tattoo oder ein interaktives Poster.</p>
+                    <p>Verwandle das Bellen deines Hundes in ein minimalistisches Sound-Tattoo.</p>
                     <span class="modal-button-fake">Hier starten</span>
                 </div>
                 <div class="modal-choice" onclick="switchModeAndCloseModal('astro')">
                     <i class="fas fa-star" style="color: #c5a059;"></i>
                     <h2>Cosmic Bond</h2>
-                    <p>Entschlüssele die astrologische Seelenverbindung zwischen dir und deinem Hund mit unserem Karma-Check.</p>
+                    <p>Entschlüssele die astrologische Seelenverbindung zu deinem Hund.</p>
                     <span class="modal-button-fake">Hier starten</span>
                 </div>
             </div>
@@ -548,11 +548,11 @@
                 </div>
 
                 <div class="share-buttons">
-                    <a href="#" id="share-wa" class="share-btn whatsapp" target="_blank">
+                    <a href="#" id="share-wa" class="share-btn whatsapp" target="_blank" rel="noopener noreferrer">
                         <i class="fab fa-whatsapp"></i> Teilen
                     </a>
-                    <a href="https://www.instagram.com/" id="share-ig" class="share-btn insta" target="_blank">
-                        <i class="fab fa-instagram"></i> Posten
+                    <a href="#" id="share-ig" class="share-btn insta">
+                        <i class="fab fa-instagram"></i> Zur Story
                     </a>
                 </div>
             </div>
@@ -762,9 +762,21 @@
             document.getElementById('result-percent').innerText = percent + "% MATCH";
             document.getElementById('result-archetype').innerText = "Spiritueller Archetyp: " + archetype;
 
-            // Share-Button Links aktualisieren
+            // --- KORREKTUR FÜR WHATSAPP & INSTAGRAM ---
+
+            // 1. WhatsApp Link
             const shareText = `Wow! Mein Hund und ich sind ein ${percent}% Seelen-Match! 🐾✨ Unser Archetyp ist "${archetype}". Mach den Test auch bei SOULPAW!`;
             document.getElementById('share-wa').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+
+            // 2. Instagram Button (löst jetzt alert aus)
+            const igBtn = document.getElementById('share-ig');
+            igBtn.href = "#"; // Verhindert, dass es zu instagram.com geht
+            igBtn.onclick = function(e) {
+                e.preventDefault(); // Stoppt den Link-Klick
+                alert("So teilst du dein Ergebnis:\n\n1. Mache jetzt einen Screenshot!\n\n2. Öffne Instagram & erstelle eine Story.\n\n3. Füge den Screenshot aus deiner Galerie ein!");
+            };
+            // --- ENDE KORREKTUR ---
+
 
             const resultBox = document.getElementById('karma-result');
             resultBox.style.display = 'block';
