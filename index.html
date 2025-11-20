@@ -42,7 +42,7 @@
 
         h1, h2, h3 { font-family: 'Cinzel', serif; letter-spacing: 1px; }
 
-        /* --- MODAL --- */
+        /* --- MODAL (3 SPALTIG) --- */
         .welcome-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(15px);
@@ -109,15 +109,12 @@
             background: #000; border-radius: 12px; overflow: hidden; border: 1px solid #333;
             position: relative; padding-left: 10px;
         }
-        .paw-start { 
-            position: absolute; left: 10%; color: var(--accent-color); font-size: 1.2rem; 
-            z-index: 2; opacity: 0.9; transform: rotate(-10deg); transition: 0.4s ease; 
-        }
+        .paw-start { position: absolute; left: 10%; color: var(--accent-color); font-size: 1.2rem; z-index: 2; opacity: 0.9; transform: rotate(-10deg); transition: 0.1s; }
         .waveform-svg { width: 100%; height: 100%; margin-left: 5px; }
         .waveform-path {
             fill: none; stroke: var(--accent-color); stroke-width: 1.5px;
             stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke;
-            animation: barkAnimation 2s infinite ease-in-out; transition: 0.4s ease;
+            animation: barkAnimation 2s infinite ease-in-out;
         }
         @keyframes barkAnimation {
             0% { d: path("M0,50 L20,50 L25,50 L30,50 L35,50 L40,50 L45,50 L50,50 L55,50 L60,50 L65,50 L70,50 L100,50"); }
@@ -169,7 +166,7 @@
         .share-btn.whatsapp { background: #25D366; color: white; }
         .share-btn.insta { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; }
 
-        /* --- SHOWCASE & ANIMATIONEN --- */
+        /* --- SHOWCASE & HOVER ANIMATIONS --- */
         .showcase { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
         .card { 
             background: var(--card-bg); padding: 2rem; border-radius: 15px; 
@@ -177,29 +174,29 @@
             transition: transform 0.4s ease, box-shadow 0.4s ease;
             transform: perspective(1000px);
         }
-        /* WICHTIG: Hover Animationen für Karten */
+        /* KEIN LILA RAND MEHR, NUR SCHATTEN UND LIFT */
         .card:hover {
             transform: perspective(1000px) rotateY(2deg) rotateX(2deg) translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            border-color: var(--accent-color);
-        }
-        /* Soundwave Hover Effekt: Pfote leuchtet, Welle wird schneller */
-        #content-sound .card:hover .paw-start {
-            text-shadow: 0 0 15px var(--accent-color), 0 0 25px var(--accent-color);
-            transform: scale(1.2) rotate(-15deg);
-        }
-        #content-sound .card:hover .waveform-path {
-            animation-duration: 0.5s; /* VIEL SCHNELLER */
-            stroke-width: 3px;
-            filter: drop-shadow(0 0 5px var(--accent-color));
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
         }
         
         body.astro-mode .card { border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 5px 20px rgba(0,0,0,0.03); }
+        body.astro-mode .card:hover { box-shadow: 0 20px 50px rgba(197, 160, 89, 0.2); }
+
         .card h3 { margin: 1.5rem 0 0.5rem; color: var(--accent-color); font-size: 1.2rem; }
-        .card p { font-size: 0.95rem; opacity: 0.8; }
         
+        /* Highlight Product Effect */
         .highlight-product { border: 2px solid var(--accent-color) !important; box-shadow: 0 0 30px rgba(197, 160, 89, 0.3) !important; transform: scale(1.02); }
-        .highlight-product:hover { transform: scale(1.05); }
+        
+        /* Soundwave Hover Effekte */
+        #content-sound .card:hover .paw-start {
+            text-shadow: 0 0 15px var(--accent-color);
+            transform: scale(1.2) rotate(-15deg);
+        }
+        #content-sound .card:hover .waveform-path {
+            animation-duration: 0.5s; /* Schneller */
+            stroke-width: 3px;
+        }
 
         /* --- VISUALS: ASTRO (CARD) --- */
         .visual-astro {
@@ -209,7 +206,7 @@
         }
         .star { position: absolute; color: var(--accent-color); font-size: 10px; }
 
-        /* --- FAQ & STEPS --- */
+        /* --- FAQ --- */
         .faq-section { padding: 4rem 5%; max-width: 800px; margin: 0 auto; }
         details { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; margin-bottom: 10px; }
         body.astro-mode details { border-color: rgba(0,0,0,0.1); }
@@ -306,7 +303,7 @@
                     <span style="font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Scan & Listen</span>
                 </div>
                 <h3>Interactive Print</h3>
-                <p>Ein minimalistisches Poster für dein Zuhause mit abspielbarem Code.</p>
+                <p>Ein minimalistisches Poster für dein Zuhause.</p>
                 <br><a href="#order" class="cta-btn" style="font-size:0.8rem; padding:10px 20px;">Poster gestalten</a>
             </div>
         </div>
@@ -387,14 +384,14 @@
         <h2 style="text-align:center; margin-bottom: 2rem;">Häufige Fragen</h2>
         <div id="faq-sound">
             <details><summary>Wie mache ich die perfekte Aufnahme?</summary><div>Am besten in einem ruhigen Raum. Halte das Handy-Mikrofon ca. 30cm entfernt und versuche, ein einzelnes, klares "Wuff" aufzunehmen. Eine Videoaufnahme funktioniert genauso gut!</div></details>
-            <details><summary>Was ist, wenn mein Hund schon verstorben ist?</summary><div>Das tut uns sehr leid. Oft finden sich die schönsten Aufnahmen in alten Handy-Videos. Wir können die Tonspur aus jedem Video extrahieren.</div></details>
-            <details><summary>Wie funktioniert das mit dem QR-Code Poster?</summary><div>Wir laden deine Audio-Datei sicher hoch und erstellen einen privaten Link. Dieser Link wird in einen QR-Code umgewandelt und dezent auf dein Poster gedruckt.</div></details>
+            <details><summary>Was ist, wenn mein Hund schon verstorben ist?</summary><div>Das tut uns sehr leid. Oft finden sich die schönsten Aufnahmen in alten Handy-Videos (z.B. vom Spielen oder aus dem Urlaub). Wir können die Tonspur aus jedem Video extrahieren, solange das Bellen zu hören ist.</div></details>
+            <details><summary>Wie funktioniert das mit dem QR-Code Poster?</summary><div>Wir laden deine Audio-Datei sicher hoch und erstellen einen privaten Link. Dieser Link wird in einen QR-Code umgewandelt und dezent auf dein Poster gedruckt. Wenn du ihn mit deiner Handy-Kamera scannst, wird das Bellen sofort abgespielt.</div></details>
         </div>
 
         <div id="faq-astro">
-            <details><summary>Ich kenne das Geburtsdatum meines Hundes nicht.</summary><div>Kein Problem! Nimm für den Astro-Check einfach das "Gotcha-Datum" – also den Tag, an dem er zu dir gekommen ist.</div></details>
-            <details><summary>Ist die Analyse wirklich "echt"?</summary><div>Unser "Seelen-Check" ist ein liebevoller Algorithmus, der auf echter Numerologie und Sonnenzeichen-Kompatibilität basiert.</div></details>
-            <details><summary>Was steht im vollständigen "Karma Chart"?</summary><div>Der vollständige Report (den du bestellst) ist eine wunderschöne PDF- oder Print-Datei. Sie enthält euren Archetypen, eure gemeinsamen Stärken und eure spirituelle "Kraft-Farbe".</div></details>
+            <details><summary>Ich kenne das Geburtsdatum meines Hundes nicht.</summary><div>Kein Problem! Nimm für den Astro-Check einfach das "Gotcha-Datum" – also den Tag, an dem er zu dir gekommen ist. Das ist der Beginn eurer gemeinsamen Reise und astrologisch genauso kraftvoll.</div></details>
+            <details><summary>Ist die Analyse wirklich "echt"?</summary><div>Unser "Seelen-Check" ist ein liebevoller Algorithmus, der auf echter Numerologie und Sonnenzeichen-Kompatibilität basiert. Er errechnet ein deterministisches (kein zufälliges) Ergebnis. Die vollständige Analyse wird dann von Hand mit diesen Daten erstellt.</div></details>
+            <details><summary>Was steht im vollständigen "Karma Chart"?</summary><div>Der vollständige Report (den du bestellst) ist eine wunderschöne PDF- oder Print-Datei. Sie enthält euren Archetypen, eure gemeinsamen Stärken, potenzielle Herausforderungen und eure spirituelle "Kraft-Farbe".</div></details>
         </div>
     </section>
 
@@ -407,26 +404,27 @@
             max-width: 900px; 
             margin: 0 auto; 
             border-radius: 40px; 
-            overflow: hidden; 
+            overflow: hidden; /* Schneidet die Ecken des Shops rund ab */
             box-shadow: 0 20px 60px rgba(0,0,0,0.2); 
-            height: 900px; 
+            height: 900px; /* Feste Höhe */
             position: relative;
         ">
-            <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); z-index:0; color:#ccc;">
-                <i class="fas fa-spinner fa-spin fa-2x"></i>
+            <div style="
+                width:100%; height:100%; 
+                display:flex; flex-direction:column; align-items:center; justify-content:center;
+                background: linear-gradient(135deg, #fdfbf7 0%, #fff 100%);
+                text-align: center;
+                padding: 20px;
+            ">
+                <i class="fas fa-store" style="font-size: 4rem; color: #9b59b6; margin-bottom: 20px;"></i>
+                <h3 style="font-family: 'Cinzel', serif; font-size: 2rem; margin-bottom: 10px; color: #333;">Zum SOULPAW Shop</h3>
+                <p style="color: #666; max-width: 400px; margin-bottom: 30px;">
+                    Unser Shop öffnet sich in einem neuen Fenster, um dir die sicherste Bestellung zu garantieren.
+                </p>
+                <a href="https://soulpaw.bigcartel.com" target="_blank" class="cta-btn" style="padding: 15px 40px; font-size: 1rem; background: #9b59b6;">
+                    Jetzt Shop öffnen <i class="fas fa-external-link-alt" style="margin-left:8px;"></i>
+                </a>
             </div>
-
-            <div id="form-container" style="width:100%; height:100%; position:relative; z-index:1; background:white;">
-                <iframe 
-                    src="https://soulpaw.bigcartel.com" 
-                    style="width:100%; height:100%; border:none;" 
-                    frameborder="0"
-                    scrolling="auto"
-                ></iframe>
-            </div>
-        </div>
-        <div style="text-align:center; margin-top:20px; opacity:0.6; font-size:0.8rem;">
-            <a href="https://soulpaw.bigcartel.com" target="_blank" style="text-decoration:underline;">Shop in neuem Fenster öffnen <i class="fas fa-external-link-alt"></i></a>
         </div>
     </section>
 
@@ -435,7 +433,6 @@
     <script>
         let hasCalculated = false;
         let uploadedImageSrc = null; 
-        const shopUrl = "https://soulpaw.bigcartel.com"; 
 
         document.addEventListener('DOMContentLoaded', () => {
             const hash = window.location.hash;
@@ -484,7 +481,6 @@
                 orderTitle.innerText = "Create Soundwave";
                 window.location.hash = 'sound';
             }
-            // Shop URL bleibt gleich, nur der Text darüber ändert sich ggf.
         }
 
         // --- TOGGLE UPLOAD ---
@@ -506,7 +502,7 @@
             }
         }
 
-        // --- CALCULATION (DATES + IMAGE) ---
+        // --- CALCULATION ---
         function calculateDeterministicKarma() {
             if(hasCalculated) return;
             const hDate = document.getElementById('dateHuman').value;
@@ -522,7 +518,6 @@
             btn.innerText = "Analysiere Sterne...";
             const steps = ["Verbinde mit NASA...", "Berechne Mondknoten...", "Match gefunden."];
             
-            // Wenn Bild da, einen Step mehr anzeigen
             if(document.getElementById('aura-check').checked) {
                  steps.splice(1, 0, "Scanne energetische Signatur...");
             }
@@ -534,7 +529,7 @@
             document.getElementById('calcBtn').style.display = 'none';
             document.getElementById('tech-output').style.display = 'none';
             
-            // AURA LOGIC
+            // AURA LOGIC (Nur wenn aktiv + Bild)
             if(document.getElementById('aura-check').checked && uploadedImageSrc) {
                 const auraBox = document.getElementById('aura-result-box');
                 auraBox.style.display = 'block';
