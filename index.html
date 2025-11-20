@@ -42,7 +42,7 @@
 
         h1, h2, h3 { font-family: 'Cinzel', serif; letter-spacing: 1px; }
 
-        /* --- MODAL --- */
+        /* --- MODAL (3 SPALTIG) --- */
         .welcome-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(15px);
@@ -50,7 +50,7 @@
             animation: fadeIn 0.5s; padding: 1rem;
         }
         .modal-content-wrapper {
-            max-width: 800px; width: 100%; background: #111;
+            max-width: 1100px; width: 100%; background: #111;
             border-radius: 20px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.6);
             border: 1px solid #333;
         }
@@ -58,18 +58,25 @@
         .modal-header h2 { font-size: 2rem; color: #fff; margin-bottom: 0.5rem; }
         .modal-header p { font-size: 1rem; color: #888; }
         
-        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; }
-        .modal-choice { padding: 3rem 2rem; text-align: center; cursor: pointer; transition: 0.3s; }
-        .modal-choice:hover { filter: brightness(1.2); }
-        .modal-choice:first-child { background: #1a0520; color: #fff; }
-        .modal-choice:last-child { background: #fffbf5; color: #2c3e50; }
+        .modal-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+        .modal-choice { 
+            padding: 3rem 2rem; text-align: center; cursor: pointer; transition: 0.3s; 
+            border-right: 1px solid rgba(255,255,255,0.05);
+        }
+        .modal-choice:last-child { border-right: none; }
+        .modal-choice:hover { filter: brightness(1.2); z-index: 2;}
         
+        .choice-sound { background: #1a0520; color: #fff; }
+        .choice-astro { background: #fffbf5; color: #2c3e50; }
+        .choice-special { background: #111; color: #C5A059; position: relative; overflow: hidden;}
+
         .modal-button-fake {
             display: inline-block; padding: 10px 25px; border-radius: 30px;
             font-weight: 700; font-size: 0.8rem; color: #fff; 
             text-transform: uppercase; margin-top: 20px;
         }
-        @media (max-width: 768px) { .modal-grid { grid-template-columns: 1fr; } .modal-content-wrapper { max-height: 90vh; overflow-y: auto; } }
+        
+        @media (max-width: 900px) { .modal-grid { grid-template-columns: 1fr; } .modal-content-wrapper { max-height: 90vh; overflow-y: auto; } }
 
         /* --- UI ELEMENTS --- */
         .brand { position: fixed; top: 20px; left: 5%; z-index: 2000; font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700; letter-spacing: 2px; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
@@ -97,57 +104,28 @@
         .content-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- 1. FEATURE: REAL-TIME VISUALIZER --- */
+        /* --- VISUALS: SOUND WAVE --- */
         .visual-sound-container {
-            height: 200px; display: flex; align-items: center; justify-content: center;
+            height: 180px; display: flex; align-items: center; justify-content: center;
             background: #000; border-radius: 12px; overflow: hidden; border: 1px solid #333;
             position: relative; padding-left: 10px;
         }
         .paw-start { position: absolute; left: 10%; color: var(--accent-color); font-size: 1.2rem; z-index: 2; opacity: 0.9; transform: rotate(-10deg); transition: 0.1s; }
         .waveform-svg { width: 100%; height: 100%; margin-left: 5px; }
         .waveform-path {
-            fill: none; stroke: var(--accent-color); stroke-width: 2px;
+            fill: none; stroke: var(--accent-color); stroke-width: 1.5px;
             stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke;
-            /* Standard Animation (Fake) */
-            animation: barkAnimation 2s infinite ease-in-out; 
-            transition: 0.1s;
+            animation: barkAnimation 2s infinite ease-in-out;
         }
         @keyframes barkAnimation {
-            0%, 100% { d: path("M0,50 L20,50 L25,50 L30,50 L35,50 L40,50 L45,50 L50,50 L55,50 L60,50 L65,50 L70,50 L100,50"); }
+            0% { d: path("M0,50 L20,50 L25,50 L30,50 L35,50 L40,50 L45,50 L50,50 L55,50 L60,50 L65,50 L70,50 L100,50"); }
             10% { d: path("M0,50 L20,50 L25,20 L30,80 L35,10 L40,90 L45,30 L50,70 L55,40 L60,60 L65,50 L70,50 L100,50"); }
+            20% { d: path("M0,50 L20,50 L25,45 L30,55 L40,52 L45,50 L50,50 L55,50 L60,50 L65,50 L70,50 L100,50"); }
             50% { d: path("M0,50 L20,50 L25,50 L30,50 L35,50 L40,50 L45,50 L50,50 L55,50 L60,50 L65,50 L70,50 L100,50"); }
+            100% { d: path("M0,50 L20,50 L25,50 L30,50 L35,50 L40,50 L45,50 L50,50 L55,50 L60,50 L65,50 L70,50 L100,50"); }
         }
         
-        /* Mic Button */
-        .mic-btn {
-            background: rgba(255,255,255,0.1); border: 1px solid var(--accent-color); color: white;
-            padding: 10px 20px; border-radius: 30px; cursor: pointer; display: inline-flex; align-items: center; gap: 10px;
-            margin-top: 15px; font-size: 0.8rem; transition: 0.3s;
-        }
-        .mic-btn:hover { background: var(--accent-color); }
-        .mic-btn.recording { background: #ff0055; border-color: #ff0055; animation: pulseRed 1s infinite; }
-        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 0, 85, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 0, 85, 0); } }
-
-
-        /* --- 2. FEATURE: AURA SCANNER --- */
-        .aura-section { margin-top: 4rem; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 3rem;}
-        body.astro-mode .aura-section { border-top: 1px solid rgba(0,0,0,0.1); }
-        
-        .aura-uploader {
-            width: 280px; height: 350px; margin: 0 auto;
-            border: 2px dashed var(--accent-color); border-radius: 20px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; overflow: hidden; position: relative;
-            background: rgba(255,255,255,0.05); transition: 0.3s;
-        }
-        .aura-uploader:hover { background: rgba(255,255,255,0.1); }
-        @keyframes pulseAura {
-            0% { box-shadow: inset 0 0 20px currentColor; }
-            50% { box-shadow: inset 0 0 80px currentColor; }
-            100% { box-shadow: inset 0 0 20px currentColor; }
-        }
-
-        /* --- ASTRO TEST --- */
+        /* --- ASTRO TEST & AURA COMBINED --- */
         .astro-test {
             background: var(--secondary-bg); padding: 2.5rem; border-radius: 20px;
             margin: 3rem auto; text-align: center; border: 1px solid var(--accent-color);
@@ -157,7 +135,30 @@
         .date-field { flex: 1; min-width: 220px; }
         .date-field label { display: block; font-size: 0.9rem; margin-bottom: 8px; font-weight: 600; color: var(--accent-color); text-transform: uppercase; letter-spacing: 1px;}
         input[type="date"] { padding: 12px; border-radius: 8px; border: 1px solid #ddd; width: 100%; font-size: 1rem; background: white; color: #333; font-family: 'Montserrat', sans-serif; cursor: pointer; }
-        input[type="date"]:focus { border-color: var(--accent-color); outline: none; }
+        
+        /* Aura Input Toggle Style */
+        .aura-toggle-container { margin: 25px 0 15px 0; display: flex; justify-content: center; align-items: center; gap: 10px; cursor: pointer; }
+        .aura-checkbox { accent-color: var(--accent-color); transform: scale(1.2); cursor: pointer; }
+        
+        .photo-upload-box {
+            margin: 20px auto; width: 100%; max-width: 300px;
+            border: 2px dashed var(--accent-color); border-radius: 15px;
+            padding: 20px; cursor: pointer; transition: 0.3s;
+            background: rgba(255,255,255,0.05);
+        }
+        .photo-upload-box:hover { background: rgba(255,255,255,0.1); }
+        
+        /* Aura Result Image */
+        .aura-display {
+            position: relative; width: 250px; height: 250px; margin: 20px auto;
+            border-radius: 50%; overflow: hidden; display: none;
+            box-shadow: 0 0 30px rgba(0,0,0,0.2);
+            border: 4px solid var(--accent-color);
+        }
+        .aura-display img { width: 100%; height: 100%; object-fit: cover; }
+        .aura-overlay { position: absolute; inset: 0; mix-blend-mode: hard-light; opacity: 0.6; animation: rotateAura 10s infinite linear; }
+        @keyframes rotateAura { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
         #tech-output { margin: 20px 0; font-family: monospace; font-size: 0.85rem; color: var(--accent-color); min-height: 20px;}
         .typing-cursor { display: inline-block; width: 8px; height: 1em; background-color: var(--accent-color); animation: blink 0.7s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
@@ -174,10 +175,13 @@
         .card h3 { margin: 1.5rem 0 0.5rem; color: var(--accent-color); font-size: 1.2rem; }
         .highlight-product { border: 2px solid var(--accent-color) !important; box-shadow: 0 0 30px rgba(197, 160, 89, 0.3) !important; transform: scale(1.02); }
 
-        /* --- 3. FEATURE: DIGITAL MEMORIAL (Special Card) --- */
-        .memorial-card { border: 1px solid #C5A059 !important; background: linear-gradient(135deg, #1a1a1a, #2a2a2a) !important; }
-        .memorial-icon { animation: candleFlicker 1.5s infinite alternate; color: #C5A059; font-size: 3rem; margin-bottom: 10px; }
-        @keyframes candleFlicker { 0% { opacity: 0.8; transform: scale(1); } 100% { opacity: 1; transform: scale(1.1); } }
+        /* --- VISUALS: ASTRO (CARD) --- */
+        .visual-astro {
+            height: 200px; display: flex; align-items: center; justify-content: center;
+            background: #fdfbf7; border-radius: 10px; border: 1px solid var(--accent-color);
+            position: relative; overflow: hidden;
+        }
+        .star { position: absolute; color: var(--accent-color); font-size: 10px; }
 
         /* --- FAQ & STEPS --- */
         .faq-section { padding: 4rem 5%; max-width: 800px; margin: 0 auto; }
@@ -205,13 +209,19 @@
         <div class="modal-content-wrapper">
             <div class="modal-header"><h2>Wähle deinen Weg</h2><p>Was möchtest du entdecken?</p></div>
             <div class="modal-grid">
-                <div class="modal-choice" onclick="switchModeAndCloseModal('sound')">
+                <div class="modal-choice choice-sound" onclick="switchModeAndCloseModal('sound')">
                     <i class="fas fa-wave-square" style="color: #9b59b6; font-size: 3rem; margin-bottom: 15px;"></i>
                     <h2 style="color: #9b59b6;">Eternal Echo</h2><p>Soundwave Art & Tattoo.</p><span class="modal-button-fake" style="background: #9b59b6;">Hier starten</span>
                 </div>
-                <div class="modal-choice" onclick="switchModeAndCloseModal('astro')">
+                <div class="modal-choice choice-astro" onclick="switchModeAndCloseModal('astro')">
                     <i class="fas fa-star" style="color: #c5a059; font-size: 3rem; margin-bottom: 15px;"></i>
                     <h2 style="color: #c5a059;">Cosmic Bond</h2><p>Astro & Aura Analyse.</p><span class="modal-button-fake" style="background: #c5a059;">Hier starten</span>
+                </div>
+                <div class="modal-choice choice-special" style="opacity: 0.7; cursor: default;">
+                    <i class="fas fa-candle-holder" style="color: #C5A059; font-size: 3rem; margin-bottom: 15px;"></i>
+                    <h2 style="color: #C5A059;">Special Edition</h2>
+                    <p>Digital Memorial Raum.</p>
+                    <span class="modal-button-fake" style="border: 1px solid #C5A059; background: transparent; color: #C5A059;">Coming Soon</span>
                 </div>
             </div>
         </div>
@@ -240,14 +250,14 @@
     <section id="content-sound" class="content-section active fade-in-section">
         <h2 style="text-align:center;">The Sound of Love</h2>
         <p style="text-align:center; opacity:0.7; max-width: 600px; margin: 0 auto 30px auto;">
-            Es ist die visuelle Frequenz der Stimme, die dich jeden Tag begrüßt.
+            Mehr als nur ein Bild. Es ist die visuelle Frequenz der Stimme, die dich jeden Tag begrüßt.
         </p>
 
         <div style="display: flex; flex-wrap: wrap; gap: 40px; justify-content: center; margin-bottom: 4rem;">
              <ul class="steps-list">
                 <li><i class="fas fa-microphone-alt"></i><div><strong>1. Aufnahme machen</strong><br>Nimm das Bellen einfach mit deinem Handy auf.</div></li>
                 <li><i class="fas fa-pencil-alt"></i><div><strong>2. Wir designen</strong><br>Wir zeichnen die Welle von Hand im "Fine Line" Stil.</div></li>
-                <li><i class="fas fa-heart"></i><div><strong>3. Dein Unikat</strong><br>Als Tattoo-Vorlage, Poster oder digitaler Raum.</div></li>
+                <li><i class="fas fa-heart"></i><div><strong>3. Dein Unikat</strong><br>Du erhältst die Datei als Tattoo-Vorlage oder Poster.</div></li>
             </ul>
         </div>
         
@@ -256,27 +266,22 @@
                 <div class="visual-sound-container">
                     <i class="fas fa-paw paw-start"></i>
                     <svg class="waveform-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-                        <path id="live-wave" class="waveform-path" d="M0,50 L30,50 L35,20 L40,80 L45,10 L50,90 L55,30 L60,70 L65,40 L70,60 L75,50 L80,50 L100,50" />
+                        <path class="waveform-path" d="M0,50 L30,50 L35,20 L40,80 L45,10 L50,90 L55,30 L60,70 L65,40 L70,60 L75,50 L80,50 L100,50" />
                     </svg>
                 </div>
                 <h3>Fine Line Tattoo Template</h3>
                 <p>Deine hochauflösende Tattoo-Vorlage.</p>
-                
-                <button class="mic-btn" onclick="startLiveViz()">
-                    <i class="fas fa-microphone"></i> Mikrofon testen
-                </button>
-                
                 <br><a href="#order" class="cta-btn" style="font-size:0.8rem; padding:10px 20px;">Vorlage erstellen</a>
             </div>
 
-            <div class="card fade-in-section memorial-card">
-                <div style="height:180px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-                    <i class="fas fa-candle-holder memorial-icon"></i>
-                    <span style="font-size:0.8rem; color:#C5A059; text-transform:uppercase; letter-spacing:1px;">Special Edition</span>
+            <div class="card fade-in-section" style="transition-delay: 100ms;">
+                <div style="height:180px; background:#222; border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; border:1px solid #444;">
+                    <i class="fas fa-qrcode" style="font-size:3rem; color:var(--accent-color); margin-bottom:10px;"></i>
+                    <span style="font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Scan & Listen</span>
                 </div>
-                <h3 style="color:#C5A059;">Der Ewige Raum</h3>
-                <p>Ein digitaler Gedenkplatz für verstorbene Fellnasen. Scanne den QR-Code und gelange zu einem geschützten Raum mit Foto, Kerze und Bellen.</p>
-                <br><a href="#order" class="cta-btn" style="background:#C5A059; font-size:0.8rem; padding:10px 20px;">Ewigen Raum erstellen</a>
+                <h3>Interactive Print</h3>
+                <p>Ein minimalistisches Poster für dein Zuhause.</p>
+                <br><a href="#order" class="cta-btn" style="font-size:0.8rem; padding:10px 20px;">Poster gestalten</a>
             </div>
         </div>
     </section>
@@ -284,46 +289,54 @@
     <section id="content-astro" class="content-section fade-in-section">
         <h2 style="text-align:center;">Die Seelen-Formel</h2>
         <p style="text-align:center; opacity:0.7; max-width: 600px; margin: 0 auto;">
-            Gib eure Geburtsdaten ein. Unser Algorithmus berechnet eure karmische Übereinstimmung.
+            Gib eure Geburtsdaten ein. Optional visualisieren wir auch die Aura deines Hundes.
         </p>
         
         <div class="astro-test">
-            <h3><i class="fas fa-moon"></i> Seelenverwandten Check</h3>
+            <h3><i class="fas fa-moon"></i> Seelen & Aura Check</h3>
+            
             <div class="input-wrapper">
                 <div class="date-field"><label>Dein Geburtstag</label><input type="date" id="dateHuman"></div>
                 <div class="date-field"><label>Geburtstag des Hundes</label><input type="date" id="dateDog"></div>
             </div>
+
+            <div class="aura-toggle-container" onclick="toggleUploadVisibility()">
+                <input type="checkbox" id="aura-check" class="aura-checkbox">
+                <label for="aura-check" style="cursor:pointer; font-weight:600;">Möchtest du auch die Aura sehen? (Optional)</label>
+            </div>
+
+            <div id="upload-wrapper" style="display:none; margin-top: 20px;">
+                <div class="photo-upload-box" onclick="document.getElementById('aura-input').click()">
+                    <i class="fas fa-camera" style="font-size:1.5rem; color:var(--accent-color);"></i>
+                    <span style="margin-left:10px; font-size:0.9rem;">Hier Bild auswählen</span>
+                    <input type="file" id="aura-input" accept="image/*" style="display:none" onchange="handleFileSelect(this)">
+                </div>
+                <p id="file-name-display" style="font-size:0.8rem; opacity:0.7;"></p>
+            </div>
+
             <div id="tech-output" class="processing-steps"></div>
             <button id="calcBtn" class="cta-btn" onclick="calculateDeterministicKarma()">Analyse starten</button>
 
             <div id="karma-result">
+                
+                <div class="aura-display" id="aura-result-box">
+                    <img id="uploaded-dog-img" src="">
+                    <div class="aura-overlay" id="aura-overlay-layer"></div>
+                </div>
+                <p id="aura-text-desc" style="font-weight:bold; color:var(--accent-color); margin-bottom:20px; display:none;"></p>
+
                 <div id="result-percent" style="font-size:3rem; font-weight:800; color:var(--accent-color); margin-bottom:5px;"></div>
                 <p id="result-archetype" style="font-weight:bold; margin-bottom:15px; text-transform:uppercase; letter-spacing:1px;"></p>
-                <div class="blurred-text">Lorem ipsum dolor sit amet, die Position des Jupiter im fünften Haus deutet auf eine Verbindung hin...</div>
+                
+                <div class="blurred-text">
+                    Lorem ipsum dolor sit amet, die Position des Jupiter im fünften Haus deutet auf eine Verbindung hin...
+                </div>
                 <div class="teaser-box">
                     <p style="font-weight:bold; color:var(--accent-color); margin-bottom:10px;">⚠️ Detaillierte Analyse erforderlich</p>
                     <p style="font-size:0.9rem;">Das ist nur der Anfang. Die vollständige Auswertung erhältst du im Zertifikat.</p>
-                    <a href="#order" class="cta-btn" style="font-size:0.8rem; padding:10px 20px;">Report bestellen</a>
+                    <a href="#order" class="cta-btn" style="font-size:0.8rem; padding:10px 20px;">Vollständigen Report bestellen</a>
                 </div>
             </div>
-        </div>
-
-        <div class="aura-section fade-in-section">
-            <h3 style="margin-bottom: 1rem; font-family: 'Cinzel', serif;">Sieh seine Aura</h3>
-            <p style="opacity: 0.7; margin-bottom: 2rem; font-size: 0.9rem;">Lade ein Foto hoch. Wir visualisieren die energetische Ausstrahlung.</p>
-
-            <div class="aura-uploader" onclick="document.getElementById('aura-input').click()">
-                <input type="file" id="aura-input" accept="image/*" style="display: none;" onchange="readAura(this)">
-                <div id="aura-placeholder">
-                    <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--accent-color); margin-bottom: 10px;"></i>
-                    <p style="font-size: 0.8rem;">Foto hier auswählen</p>
-                </div>
-                <div id="aura-result" style="display: none; position: relative; width: 100%; height: 100%;">
-                    <img id="uploaded-dog" style="width: 100%; height: 100%; object-fit: cover; border-radius: 15px;">
-                    <div id="aura-glow" style="position: absolute; inset: 0; border-radius: 15px; mix-blend-mode: overlay; opacity: 0.6;"></div>
-                </div>
-            </div>
-            <div id="aura-text" style="margin-top: 20px; font-weight: bold; color: var(--accent-color); display: none;"></div>
         </div>
 
         <div class="showcase">
@@ -347,14 +360,15 @@
     <section class="faq-section fade-in-section">
         <h2 style="text-align:center; margin-bottom: 2rem;">Häufige Fragen</h2>
         <div id="faq-sound">
-            <details><summary>Wie mache ich die perfekte Aufnahme?</summary><div>Ruhiger Raum, ca. 30cm Abstand.</div></details>
-            <details><summary>Geht auch ein Video?</summary><div>Ja, wir extrahieren die Tonspur aus jedem Video.</div></details>
-            <details><summary>Was ist der Ewige Raum?</summary><div>Eine private Webseite für dein Tier, die nie gelöscht wird.</div></details>
+            <details><summary>Wie mache ich die perfekte Aufnahme?</summary><div>Am besten in einem ruhigen Raum. Halte das Handy-Mikrofon ca. 30cm entfernt und versuche, ein einzelnes, klares "Wuff" aufzunehmen. Eine Videoaufnahme funktioniert genauso gut!</div></details>
+            <details><summary>Was ist, wenn mein Hund schon verstorben ist?</summary><div>Das tut uns sehr leid. Oft finden sich die schönsten Aufnahmen in alten Handy-Videos (z.B. vom Spielen oder aus dem Urlaub). Wir können die Tonspur aus jedem Video extrahieren, solange das Bellen zu hören ist.</div></details>
+            <details><summary>Wie funktioniert das mit dem QR-Code Poster?</summary><div>Wir laden deine Audio-Datei sicher hoch und erstellen einen privaten Link. Dieser Link wird in einen QR-Code umgewandelt und dezent auf dein Poster gedruckt. Wenn du ihn mit deiner Handy-Kamera scannst, wird das Bellen sofort abgespielt.</div></details>
         </div>
+
         <div id="faq-astro">
-            <details><summary>Geburtsdatum unbekannt?</summary><div>Nimm das "Gotcha-Datum" (Einzugstag).</div></details>
-            <details><summary>Ist die Analyse echt?</summary><div>Ja, basierend auf Numerologie und Sonnenzeichen.</div></details>
-            <details><summary>Was steht im Report?</summary><div>Stärken, Herausforderungen und Kraft-Farben.</div></details>
+            <details><summary>Ich kenne das Geburtsdatum meines Hundes nicht.</summary><div>Kein Problem! Nimm für den Astro-Check einfach das "Gotcha-Datum" – also den Tag, an dem er zu dir gekommen ist. Das ist der Beginn eurer gemeinsamen Reise und astrologisch genauso kraftvoll.</div></details>
+            <details><summary>Ist die Analyse wirklich "echt"?</summary><div>Unser "Seelen-Check" ist ein liebevoller Algorithmus, der auf echter Numerologie und Sonnenzeichen-Kompatibilität basiert. Er errechnet ein deterministisches (kein zufälliges) Ergebnis. Die vollständige Analyse wird dann von Hand mit diesen Daten erstellt.</div></details>
+            <details><summary>Was steht im vollständigen "Karma Chart"?</summary><div>Der vollständige Report (den du bestellst) ist eine wunderschöne PDF- oder Print-Datei. Sie enthält euren Archetypen, eure gemeinsamen Stärken, potenzielle Herausforderungen und eure spirituelle "Kraft-Farbe".</div></details>
         </div>
     </section>
 
@@ -362,9 +376,23 @@
         <h2 id="order-title" style="text-align:center; margin-bottom: 0.5rem;">Start Creation</h2>
         <p id="order-desc" style="margin-bottom: 2rem; opacity:0.7; text-align:center;">Lade deine Datei hoch & wir starten.</p>
         
-        <div style="background: white; max-width: 800px; margin: 0 auto; border-radius: 40px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.2); min-height: 900px; position: relative;">
+        <div style="
+            background: white; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            border-radius: 40px; 
+            overflow: hidden; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2); 
+            min-height: 900px;
+            position: relative;
+        ">
             <div id="form-container" style="width:100%; height:100%;">
-                <iframe src="https://form.jotform.com/253195175200047" style="width:100%; height:900px; border:none;" frameborder="0" scrolling="auto"></iframe>
+                <iframe 
+                    src="https://form.jotform.com/253195175200047" 
+                    style="width:100%; height:900px; border:none;" 
+                    frameborder="0"
+                    scrolling="auto"
+                ></iframe>
             </div>
         </div>
     </section>
@@ -373,10 +401,10 @@
 
     <script>
         let hasCalculated = false;
+        let uploadedImageSrc = null; // Store image
         const formSoundLink = "https://form.jotform.com/253195175200047"; 
         const formAstroLink = "https://form.jotform.com/253183756171056"; 
 
-        // Init
         document.addEventListener('DOMContentLoaded', () => {
             const hash = window.location.hash;
             if (hash === '#astro') switchMode('astro');
@@ -429,90 +457,26 @@
             }
         }
 
-        // --- REAL-TIME VOICE VISUALIZER ---
-        let audioCtx, analyser, dataArray;
-        async function startLiveViz() {
-            const btn = document.querySelector('.mic-btn');
-            if (btn.classList.contains('recording')) return; // Schon aktiv
-            
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                btn.classList.add('recording');
-                btn.innerHTML = "<i class='fas fa-circle'></i> Listening...";
-                
-                // Stop Fake Animation
-                const path = document.getElementById('live-wave');
-                path.style.animation = 'none';
-
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                analyser = audioCtx.createAnalyser();
-                const source = audioCtx.createMediaStreamSource(stream);
-                source.connect(analyser);
-                analyser.fftSize = 32; // Kleine Auflösung für einfache Linie
-                dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-                drawLiveWave();
-            } catch (err) {
-                alert("Bitte erlaube Mikrofon-Zugriff für dieses Feature!");
-            }
+        // --- TOGGLE UPLOAD ---
+        function toggleUploadVisibility() {
+            const chk = document.getElementById('aura-check');
+            const wrapper = document.getElementById('upload-wrapper');
+            wrapper.style.display = chk.checked ? 'block' : 'none';
         }
 
-        function drawLiveWave() {
-            if(!analyser) return;
-            requestAnimationFrame(drawLiveWave);
-            analyser.getByteFrequencyData(dataArray);
-            
-            // Berechne "Lautstärke"
-            let sum = 0;
-            for(let i=0; i<dataArray.length; i++) sum += dataArray[i];
-            const volume = sum / dataArray.length; // 0 bis 255
-            
-            // Mappe Lautstärke auf Y-Ausschlag (Basis 50)
-            const spike = (volume / 255) * 40; // Max 40px hoch/runter
-            
-            // Simuliere die Pfote-Welle basierend auf Lautstärke
-            const path = document.getElementById('live-wave');
-            // Einfache Dynamik: Mitte (X=50) springt hoch/runter
-            const yTop = 50 - spike;
-            const yBot = 50 + spike;
-            
-            // SVG Path Update
-            path.setAttribute('d', `M0,50 L30,50 L35,${50-spike/2} L40,${yBot} L45,${yTop} L50,${yBot+5} L55,${yTop+5} L60,${yBot} L65,50 L100,50`);
-        }
-
-        // --- AURA LOGIC ---
-        function readAura(input) {
+        // --- FILE UPLOAD HANDLER ---
+        function handleFileSelect(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function (e) {
-                    document.getElementById('aura-placeholder').style.display = 'none';
-                    document.getElementById('aura-result').style.display = 'block';
-                    document.getElementById('uploaded-dog').src = e.target.result;
-                    
-                    const auras = [
-                        { color: "#ff0055", name: "Rubinrot (Leidenschaft)", shadow: "0 0 50px #ff0055" },
-                        { color: "#00ffcc", name: "Türkis (Der Heiler)", shadow: "0 0 50px #00ffcc" },
-                        { color: "#9b59b6", name: "Mystic Violet (Alte Seele)", shadow: "0 0 50px #9b59b6" },
-                        { color: "#f1c40f", name: "Golden Sun (Freude)", shadow: "0 0 50px #f1c40f" }
-                    ];
-                    const index = input.files[0].size % auras.length;
-                    const aura = auras[index];
-
-                    const glow = document.getElementById('aura-glow');
-                    glow.style.backgroundColor = aura.color;
-                    glow.style.boxShadow = `inset ${aura.shadow}`;
-                    glow.style.animation = "pulseAura 3s infinite";
-                    glow.style.color = aura.color; 
-
-                    const txt = document.getElementById('aura-text');
-                    txt.style.display = 'block';
-                    txt.innerHTML = `<span style="color:${aura.color}; text-shadow: 0 0 10px ${aura.color}">✨ ${aura.name} ✨</span><br><span style="font-size:0.8rem; color:#888;">Mach einen Screenshot für deine Story!</span>`;
+                    uploadedImageSrc = e.target.result;
+                    document.getElementById('file-name-display').innerText = "Bild ausgewählt: " + input.files[0].name;
                 };
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
-        // --- ASTRO LOGIC ---
+        // --- CALCULATION (DATES + IMAGE) ---
         function calculateDeterministicKarma() {
             if(hasCalculated) return;
             const hDate = document.getElementById('dateHuman').value;
@@ -520,13 +484,19 @@
             const btn = document.getElementById('calcBtn');
             const output = document.getElementById('tech-output');
 
-            if(!hDate || !dDate) { alert("Bitte beide Daten eingeben."); return; }
-
+            if(!hDate || !dDate) { alert("Bitte beide Geburtstage eingeben."); return; }
+            
             hasCalculated = true;
             btn.disabled = true;
             btn.style.opacity = "0.5";
             btn.innerText = "Analysiere Sterne...";
             const steps = ["Verbinde mit NASA...", "Berechne Mondknoten...", "Match gefunden."];
+            
+            // Wenn Bild da, einen Step mehr anzeigen
+            if(document.getElementById('aura-check').checked) {
+                 steps.splice(1, 0, "Scanne energetische Signatur...");
+            }
+
             typewriterEffect(steps, output, () => { showResults(hDate, dDate); });
         }
 
@@ -534,6 +504,30 @@
             document.getElementById('calcBtn').style.display = 'none';
             document.getElementById('tech-output').style.display = 'none';
             
+            // AURA LOGIC DISPLAY (Nur wenn Checkbox UND Bild)
+            if(document.getElementById('aura-check').checked && uploadedImageSrc) {
+                const auraBox = document.getElementById('aura-result-box');
+                auraBox.style.display = 'block';
+                document.getElementById('uploaded-dog-img').src = uploadedImageSrc;
+                document.getElementById('aura-text-desc').style.display = 'block';
+                
+                // Deterministische Farbe
+                const auras = [
+                    { color: "#ff0055", name: "Rubinrot (Leidenschaft)" },
+                    { color: "#00ffcc", name: "Türkis (Der Heiler)" },
+                    { color: "#9b59b6", name: "Mystic Violet (Alte Seele)" },
+                    { color: "#f1c40f", name: "Golden Sun (Freude)" }
+                ];
+                let combined = date1 + date2;
+                let hash = 0;
+                for (let i = 0; i < combined.length; i++) hash += combined.charCodeAt(i);
+                const aura = auras[hash % auras.length];
+
+                document.getElementById('aura-overlay-layer').style.background = `radial-gradient(circle, ${aura.color} 0%, transparent 70%)`;
+                document.getElementById('aura-text-desc').innerText = `✨ Energetische Aura: ${aura.name}`;
+            }
+
+            // ASTRO LOGIC
             let combined = date1 + date2;
             let hash = 0;
             for (let i = 0; i < combined.length; i++) hash += combined.charCodeAt(i);
@@ -548,6 +542,7 @@
             document.getElementById('karma-result').style.animation = "fadeIn 1s";
             document.getElementById('astro-product-card').classList.add('highlight-product');
             document.getElementById('astro-product-card').style.opacity = "1"; 
+            
             document.getElementById('karma-result').scrollIntoView({behavior: "smooth", block: "center"});
         }
         
