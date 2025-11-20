@@ -42,7 +42,7 @@
 
         h1, h2, h3 { font-family: 'Cinzel', serif; letter-spacing: 1px; }
 
-        /* --- MODAL (3 SPALTIG) --- */
+        /* --- MODAL --- */
         .welcome-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(15px);
@@ -75,7 +75,6 @@
             font-weight: 700; font-size: 0.8rem; color: #fff; 
             text-transform: uppercase; margin-top: 20px;
         }
-        
         @media (max-width: 900px) { .modal-grid { grid-template-columns: 1fr; } .modal-content-wrapper { max-height: 90vh; overflow-y: auto; } }
 
         /* --- UI ELEMENTS --- */
@@ -110,12 +109,15 @@
             background: #000; border-radius: 12px; overflow: hidden; border: 1px solid #333;
             position: relative; padding-left: 10px;
         }
-        .paw-start { position: absolute; left: 10%; color: var(--accent-color); font-size: 1.2rem; z-index: 2; opacity: 0.9; transform: rotate(-10deg); transition: 0.1s; }
+        .paw-start { 
+            position: absolute; left: 10%; color: var(--accent-color); font-size: 1.2rem; 
+            z-index: 2; opacity: 0.9; transform: rotate(-10deg); transition: 0.4s ease; 
+        }
         .waveform-svg { width: 100%; height: 100%; margin-left: 5px; }
         .waveform-path {
             fill: none; stroke: var(--accent-color); stroke-width: 1.5px;
             stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke;
-            animation: barkAnimation 2s infinite ease-in-out;
+            animation: barkAnimation 2s infinite ease-in-out; transition: 0.4s ease;
         }
         @keyframes barkAnimation {
             0% { d: path("M0,50 L20,50 L25,50 L30,50 L35,50 L40,50 L45,50 L50,50 L55,50 L60,50 L65,50 L70,50 L100,50"); }
@@ -125,7 +127,7 @@
             100% { d: path("M0,50 L20,50 L25,50 L30,50 L35,50 L40,50 L45,50 L50,50 L55,50 L60,50 L65,50 L70,50 L100,50"); }
         }
         
-        /* --- ASTRO TEST & AURA COMBINED --- */
+        /* --- ASTRO TEST & AURA --- */
         .astro-test {
             background: var(--secondary-bg); padding: 2.5rem; border-radius: 20px;
             margin: 3rem auto; text-align: center; border: 1px solid var(--accent-color);
@@ -136,24 +138,20 @@
         .date-field label { display: block; font-size: 0.9rem; margin-bottom: 8px; font-weight: 600; color: var(--accent-color); text-transform: uppercase; letter-spacing: 1px;}
         input[type="date"] { padding: 12px; border-radius: 8px; border: 1px solid #ddd; width: 100%; font-size: 1rem; background: white; color: #333; font-family: 'Montserrat', sans-serif; cursor: pointer; }
         
-        /* Aura Input Toggle Style */
         .aura-toggle-container { margin: 25px 0 15px 0; display: flex; justify-content: center; align-items: center; gap: 10px; cursor: pointer; }
         .aura-checkbox { accent-color: var(--accent-color); transform: scale(1.2); cursor: pointer; }
         
         .photo-upload-box {
             margin: 20px auto; width: 100%; max-width: 300px;
             border: 2px dashed var(--accent-color); border-radius: 15px;
-            padding: 20px; cursor: pointer; transition: 0.3s;
-            background: rgba(255,255,255,0.05);
+            padding: 20px; cursor: pointer; transition: 0.3s; background: rgba(255,255,255,0.05);
         }
         .photo-upload-box:hover { background: rgba(255,255,255,0.1); }
         
-        /* Aura Result Image */
         .aura-display {
             position: relative; width: 250px; height: 250px; margin: 20px auto;
             border-radius: 50%; overflow: hidden; display: none;
-            box-shadow: 0 0 30px rgba(0,0,0,0.2);
-            border: 4px solid var(--accent-color);
+            box-shadow: 0 0 30px rgba(0,0,0,0.2); border: 4px solid var(--accent-color);
         }
         .aura-display img { width: 100%; height: 100%; object-fit: cover; }
         .aura-overlay { position: absolute; inset: 0; mix-blend-mode: hard-light; opacity: 0.6; animation: rotateAura 10s infinite linear; }
@@ -166,14 +164,42 @@
         .blurred-text { filter: blur(4px); user-select: none; opacity: 0.6; margin: 15px 0; font-family: 'Times New Roman', serif; font-style: italic; background: linear-gradient(to bottom, transparent, var(--bg-color)); }
         .teaser-box { border: 1px dashed var(--accent-color); padding: 20px; margin-top: -30px; position: relative; z-index: 2; background: rgba(255,255,255,0.95); border-radius: 10px; }
         body:not(.astro-mode) .teaser-box { background: rgba(20,20,20,0.95); }
+        .share-buttons { margin-top: 25px; display: flex; gap: 10px; justify-content: center; }
+        .share-btn { padding: 10px 18px; border-radius: 20px; text-decoration: none; font-weight: 600; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 8px; }
+        .share-btn.whatsapp { background: #25D366; color: white; }
+        .share-btn.insta { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; }
 
-        /* --- SHOWCASE --- */
+        /* --- SHOWCASE & ANIMATIONEN --- */
         .showcase { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem; }
-        .card { background: var(--card-bg); padding: 2rem; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.1); transition: transform 0.4s ease, box-shadow 0.4s ease; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+        .card { 
+            background: var(--card-bg); padding: 2rem; border-radius: 15px; 
+            text-align: center; border: 1px solid rgba(255,255,255,0.1); 
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            transform: perspective(1000px);
+        }
+        /* WICHTIG: Hover Animationen für Karten */
+        .card:hover {
+            transform: perspective(1000px) rotateY(2deg) rotateX(2deg) translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            border-color: var(--accent-color);
+        }
+        /* Soundwave Hover Effekt: Pfote leuchtet, Welle wird schneller */
+        #content-sound .card:hover .paw-start {
+            text-shadow: 0 0 15px var(--accent-color), 0 0 25px var(--accent-color);
+            transform: scale(1.2) rotate(-15deg);
+        }
+        #content-sound .card:hover .waveform-path {
+            animation-duration: 0.5s; /* VIEL SCHNELLER */
+            stroke-width: 3px;
+            filter: drop-shadow(0 0 5px var(--accent-color));
+        }
+        
         body.astro-mode .card { border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 5px 20px rgba(0,0,0,0.03); }
         .card h3 { margin: 1.5rem 0 0.5rem; color: var(--accent-color); font-size: 1.2rem; }
+        .card p { font-size: 0.95rem; opacity: 0.8; }
+        
         .highlight-product { border: 2px solid var(--accent-color) !important; box-shadow: 0 0 30px rgba(197, 160, 89, 0.3) !important; transform: scale(1.02); }
+        .highlight-product:hover { transform: scale(1.05); }
 
         /* --- VISUALS: ASTRO (CARD) --- */
         .visual-astro {
@@ -270,7 +296,7 @@
                     </svg>
                 </div>
                 <h3>Fine Line Tattoo Template</h3>
-                <p>Deine hochauflösende Tattoo-Vorlage.</p>
+                <p>Deine hochauflösende Vektordatei. Perfekt für den Tätowierer.</p>
                 <br><a href="#order" class="cta-btn" style="font-size:0.8rem; padding:10px 20px;">Vorlage erstellen</a>
             </div>
 
@@ -280,7 +306,7 @@
                     <span style="font-size:0.7rem; text-transform:uppercase; letter-spacing:1px;">Scan & Listen</span>
                 </div>
                 <h3>Interactive Print</h3>
-                <p>Ein minimalistisches Poster für dein Zuhause.</p>
+                <p>Ein minimalistisches Poster für dein Zuhause mit abspielbarem Code.</p>
                 <br><a href="#order" class="cta-btn" style="font-size:0.8rem; padding:10px 20px;">Poster gestalten</a>
             </div>
         </div>
@@ -361,39 +387,46 @@
         <h2 style="text-align:center; margin-bottom: 2rem;">Häufige Fragen</h2>
         <div id="faq-sound">
             <details><summary>Wie mache ich die perfekte Aufnahme?</summary><div>Am besten in einem ruhigen Raum. Halte das Handy-Mikrofon ca. 30cm entfernt und versuche, ein einzelnes, klares "Wuff" aufzunehmen. Eine Videoaufnahme funktioniert genauso gut!</div></details>
-            <details><summary>Was ist, wenn mein Hund schon verstorben ist?</summary><div>Das tut uns sehr leid. Oft finden sich die schönsten Aufnahmen in alten Handy-Videos (z.B. vom Spielen oder aus dem Urlaub). Wir können die Tonspur aus jedem Video extrahieren, solange das Bellen zu hören ist.</div></details>
-            <details><summary>Wie funktioniert das mit dem QR-Code Poster?</summary><div>Wir laden deine Audio-Datei sicher hoch und erstellen einen privaten Link. Dieser Link wird in einen QR-Code umgewandelt und dezent auf dein Poster gedruckt. Wenn du ihn mit deiner Handy-Kamera scannst, wird das Bellen sofort abgespielt.</div></details>
+            <details><summary>Was ist, wenn mein Hund schon verstorben ist?</summary><div>Das tut uns sehr leid. Oft finden sich die schönsten Aufnahmen in alten Handy-Videos. Wir können die Tonspur aus jedem Video extrahieren.</div></details>
+            <details><summary>Wie funktioniert das mit dem QR-Code Poster?</summary><div>Wir laden deine Audio-Datei sicher hoch und erstellen einen privaten Link. Dieser Link wird in einen QR-Code umgewandelt und dezent auf dein Poster gedruckt.</div></details>
         </div>
 
         <div id="faq-astro">
-            <details><summary>Ich kenne das Geburtsdatum meines Hundes nicht.</summary><div>Kein Problem! Nimm für den Astro-Check einfach das "Gotcha-Datum" – also den Tag, an dem er zu dir gekommen ist. Das ist der Beginn eurer gemeinsamen Reise und astrologisch genauso kraftvoll.</div></details>
-            <details><summary>Ist die Analyse wirklich "echt"?</summary><div>Unser "Seelen-Check" ist ein liebevoller Algorithmus, der auf echter Numerologie und Sonnenzeichen-Kompatibilität basiert. Er errechnet ein deterministisches (kein zufälliges) Ergebnis. Die vollständige Analyse wird dann von Hand mit diesen Daten erstellt.</div></details>
-            <details><summary>Was steht im vollständigen "Karma Chart"?</summary><div>Der vollständige Report (den du bestellst) ist eine wunderschöne PDF- oder Print-Datei. Sie enthält euren Archetypen, eure gemeinsamen Stärken, potenzielle Herausforderungen und eure spirituelle "Kraft-Farbe".</div></details>
+            <details><summary>Ich kenne das Geburtsdatum meines Hundes nicht.</summary><div>Kein Problem! Nimm für den Astro-Check einfach das "Gotcha-Datum" – also den Tag, an dem er zu dir gekommen ist.</div></details>
+            <details><summary>Ist die Analyse wirklich "echt"?</summary><div>Unser "Seelen-Check" ist ein liebevoller Algorithmus, der auf echter Numerologie und Sonnenzeichen-Kompatibilität basiert.</div></details>
+            <details><summary>Was steht im vollständigen "Karma Chart"?</summary><div>Der vollständige Report (den du bestellst) ist eine wunderschöne PDF- oder Print-Datei. Sie enthält euren Archetypen, eure gemeinsamen Stärken und eure spirituelle "Kraft-Farbe".</div></details>
         </div>
     </section>
 
     <section id="order" class="fade-in-section">
-        <h2 id="order-title" style="text-align:center; margin-bottom: 0.5rem;">Start Creation</h2>
-        <p id="order-desc" style="margin-bottom: 2rem; opacity:0.7; text-align:center;">Lade deine Datei hoch & wir starten.</p>
+        <h2 id="order-title" style="text-align:center; margin-bottom: 0.5rem;">Dein Unikat bestellen</h2>
+        <p id="order-desc" style="margin-bottom: 2rem; opacity:0.7; text-align:center;">Wähle dein Produkt direkt in unserem Shop.</p>
         
         <div style="
             background: white; 
-            max-width: 800px; 
+            max-width: 900px; 
             margin: 0 auto; 
             border-radius: 40px; 
             overflow: hidden; 
             box-shadow: 0 20px 60px rgba(0,0,0,0.2); 
-            min-height: 900px;
+            height: 900px; 
             position: relative;
         ">
-            <div id="form-container" style="width:100%; height:100%;">
+            <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); z-index:0; color:#ccc;">
+                <i class="fas fa-spinner fa-spin fa-2x"></i>
+            </div>
+
+            <div id="form-container" style="width:100%; height:100%; position:relative; z-index:1; background:white;">
                 <iframe 
-                    src="https://form.jotform.com/253195175200047" 
-                    style="width:100%; height:900px; border:none;" 
+                    src="https://soulpaw.bigcartel.com" 
+                    style="width:100%; height:100%; border:none;" 
                     frameborder="0"
                     scrolling="auto"
                 ></iframe>
             </div>
+        </div>
+        <div style="text-align:center; margin-top:20px; opacity:0.6; font-size:0.8rem;">
+            <a href="https://soulpaw.bigcartel.com" target="_blank" style="text-decoration:underline;">Shop in neuem Fenster öffnen <i class="fas fa-external-link-alt"></i></a>
         </div>
     </section>
 
@@ -401,9 +434,8 @@
 
     <script>
         let hasCalculated = false;
-        let uploadedImageSrc = null; // Store image
-        const formSoundLink = "https://form.jotform.com/253195175200047"; 
-        const formAstroLink = "https://form.jotform.com/253183756171056"; 
+        let uploadedImageSrc = null; 
+        const shopUrl = "https://soulpaw.bigcartel.com"; 
 
         document.addEventListener('DOMContentLoaded', () => {
             const hash = window.location.hash;
@@ -434,7 +466,6 @@
             const sectionSound = document.getElementById('content-sound');
             const sectionAstro = document.getElementById('content-astro');
             const orderTitle = document.getElementById('order-title');
-            const formContainer = document.getElementById('form-container');
 
             btns.forEach(b => b.classList.remove('active'));
 
@@ -444,7 +475,6 @@
                 heroSound.style.display = 'none'; heroAstro.style.display = 'block';
                 sectionSound.classList.remove('active'); sectionAstro.classList.add('active');
                 orderTitle.innerText = "Unlock Cosmic Data";
-                formContainer.innerHTML = `<iframe src="${formAstroLink}" style="width:100%; height:900px; border:none;"></iframe>`;
                 window.location.hash = 'astro';
             } else {
                 body.classList.remove('astro-mode');
@@ -452,9 +482,9 @@
                 heroSound.style.display = 'block'; heroAstro.style.display = 'none';
                 sectionSound.classList.add('active'); sectionAstro.classList.remove('active');
                 orderTitle.innerText = "Create Soundwave";
-                formContainer.innerHTML = `<iframe src="${formSoundLink}" style="width:100%; height:900px; border:none;"></iframe>`;
                 window.location.hash = 'sound';
             }
+            // Shop URL bleibt gleich, nur der Text darüber ändert sich ggf.
         }
 
         // --- TOGGLE UPLOAD ---
@@ -504,14 +534,13 @@
             document.getElementById('calcBtn').style.display = 'none';
             document.getElementById('tech-output').style.display = 'none';
             
-            // AURA LOGIC DISPLAY (Nur wenn Checkbox UND Bild)
+            // AURA LOGIC
             if(document.getElementById('aura-check').checked && uploadedImageSrc) {
                 const auraBox = document.getElementById('aura-result-box');
                 auraBox.style.display = 'block';
                 document.getElementById('uploaded-dog-img').src = uploadedImageSrc;
                 document.getElementById('aura-text-desc').style.display = 'block';
                 
-                // Deterministische Farbe
                 const auras = [
                     { color: "#ff0055", name: "Rubinrot (Leidenschaft)" },
                     { color: "#00ffcc", name: "Türkis (Der Heiler)" },
