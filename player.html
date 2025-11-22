@@ -41,9 +41,9 @@
             text-shadow: 0 0 15px rgba(155, 89, 182, 0.5);
         }
 
-               .player-card {
+        .player-card {
             width: 100%;
-            max-width: 600px; /* Breiter gemacht (war 400px), sieht auf Tablets besser aus */
+            max-width: 400px;
             background: var(--card-bg);
             border-radius: 30px;
             padding: 40px 20px;
@@ -53,18 +53,16 @@
             position: relative;
             transition: box-shadow 0.3s ease;
         }
-
         
-        /* Glow Effekt beim Abspielen */
         .player-card.playing {
             box-shadow: 0 20px 60px rgba(155, 89, 182, 0.3);
             border-color: rgba(155, 89, 182, 0.3);
         }
 
-              /* --- VISUALIZER (UPDATED) --- */
+        /* --- VISUALIZER --- */
         .visual-container {
             width: 100%;
-            height: 250px; /* Etwas höher gemacht */
+            height: 220px;
             background: #050505;
             border-radius: 20px;
             margin-bottom: 30px;
@@ -74,39 +72,19 @@
             position: relative;
             border: 1px solid #222;
             overflow: hidden;
-            padding: 0; /* WICHTIG: Kein Abstand mehr zum Rand */
+            padding: 10px;
         }
 
-        /* Das Canvas Element */
-        #processed-canvas {
-            width: 100%;
-            height: 100%;
-            /* WICHTIG: 'cover' zoomt rein, bis die Box voll ist. 
-               'contain' zeigt alles (auch Ränder). 
-               Ändere dies zu 'contain', falls Teile abgeschnitten werden. */
-            object-fit: cover; 
-            object-position: center;
-            opacity: 0;
-            transition: opacity 0.5s ease, transform 0.2s ease;
-            /* Stärkerer Glow für bessere Sichtbarkeit */
-            filter: drop-shadow(0 0 8px rgba(155, 89, 182, 0.8));
-        }
-
-
-        /* Das Canvas Element (Hier passiert die Magie) */
         #processed-canvas {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
             opacity: 0;
             transition: opacity 0.5s ease, transform 0.2s ease;
-            /* Filter für noch mehr Glow */
             filter: drop-shadow(0 0 5px rgba(155, 89, 182, 0.5));
         }
         
-        .playing #processed-canvas {
-            transform: scale(1.02);
-        }
+        .playing #processed-canvas { transform: scale(1.02); }
 
         .loading-spinner {
             position: absolute;
@@ -114,7 +92,8 @@
             font-size: 2rem;
         }
 
-        h2 { font-family: 'Cinzel', serif; font-size: 1.5rem; margin-bottom: 5px; }
+        /* IDs hinzugefügt für JS Zugriff */
+        h2 { font-family: 'Cinzel', serif; font-size: 1.5rem; margin-bottom: 5px; text-transform: capitalize; }
         p { color: #888; font-size: 0.9rem; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
 
         .play-btn {
@@ -151,8 +130,8 @@
             <canvas id="processed-canvas"></canvas>
         </div>
 
-        <h2>The Eternal Echo</h2>
-        <p>Voice of a Soulmate</p>
+        <h2 id="player-title">The Eternal Echo</h2>
+        <p id="player-subtitle">Voice of a Soulmate</p>
 
         <audio id="audio-player" preload="auto"></audio>
 
@@ -184,65 +163,77 @@
         const errorMsg = document.getElementById('error-msg');
         const card = document.getElementById('main-card');
 
-        // 1. Audio laden
+        // --- NEUE FUNKTION: NAMEN AUS DATEI ERKENNEN ---
+        function updateNameFromFilename(filename) {
+            if (!filename) return;
+
+            // Dateiendung entfernen (z.B. .m4a)
+            let name = filename.substring(0, filename.lastIndexOf('.'));
+            
+            // Decode URI Component falls Leerzeichen als %20 kommen
+            name = decodeURIComponent(name);
+
+            // Regex Prüfung: Ist es ein generischer System-Name?
+            // Prüft auf: Startet mit AUDIO, IMG, Zahlen, Datumsmuster (YYYY-MM-DD)
+            const isGeneric = /^(AUDIO|IMG|DSC|REC|WhatsApp|Video|Sound)|\d{4}-\d{2}-\d{2}|^\d+$/i.test(name);
+
+            if (!isGeneric && name.length > 1) {
+                // Es ist wahrscheinlich ein echter Name!
+                
+                // Unterstriche/Bindestriche durch Leerzeichen ersetzen
+                name = name.replace(/[-_]/g, ' ');
+                
+                // Setze den Titel auf den Namen
+                document.getElementById('player-title').innerText = name;
+                document.getElementById('player-subtitle').innerText = "The Eternal Echo";
+            }
+        }
+
+        // 1. Audio laden & Name prüfen
         if (soundFile) {
             audio.src = "soundfiles/" + soundFile;
+            // Versuche Name aus Audio-Datei zu lesen
+            updateNameFromFilename(soundFile);
         } else {
             showError("Audio nicht gefunden.");
         }
 
-        // 2. Bild laden und AUTOMATISCH bearbeiten (Weiß -> Transparent, Schwarz -> Lila)
+        // 2. Bild laden & Bearbeiten (Weiß -> Transparent, Schwarz -> Lila)
         if (imageFile) {
             const img = new Image();
-            // Wichtig: crossOrigin erlaubt Manipulation, falls Bild von extern kommt (hier lokal egal)
             img.crossOrigin = "Anonymous"; 
             img.src = "images/" + imageFile;
             
             img.onload = function() {
                 spinner.style.display = 'none';
-                
-                // Canvas Größe an Bild anpassen
                 canvas.width = img.width;
                 canvas.height = img.height;
-                
-                // Bild auf Canvas zeichnen
                 ctx.drawImage(img, 0, 0);
                 
-                // Pixel-Daten holen
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 const data = imageData.data;
                 
-                // Jeden Pixel durchgehen
                 for (let i = 0; i < data.length; i += 4) {
                     const r = data[i];
                     const g = data[i + 1];
                     const b = data[i + 2];
-                    
-                    // Helligkeit berechnen (Durchschnitt)
                     const brightness = (r + g + b) / 3;
                     
                     if (brightness > 200) {
-                        // Wenn HELL (Weißer Hintergrund): Mache komplett transparent
-                        data[i + 3] = 0; 
+                        data[i + 3] = 0; // Weiß -> Transparent
                     } else {
-                        // Wenn DUNKEL (Die Linie): Färbe Lila (#9b59b6)
-                        // RGB für #9b59b6 ist: 155, 89, 182
-                        data[i] = 155;     // Red
-                        data[i + 1] = 89;  // Green
-                        data[i + 2] = 182; // Blue
-                        // Alpha (Sichtbarkeit) lassen wir, oder setzen auf voll (255)
+                        // Schwarz -> Lila (#9b59b6)
+                        data[i] = 155; data[i + 1] = 89; data[i + 2] = 182;
                         if(data[i+3] > 0) data[i+3] = 255; 
                     }
                 }
-                
-                // Bearbeitetes Bild zurück aufs Canvas schreiben
                 ctx.putImageData(imageData, 0, 0);
                 canvas.style.opacity = '1';
             };
             
             img.onerror = function() {
                 spinner.style.display = 'none';
-                showError("Bild konnte nicht verarbeitet werden.");
+                showError("Bild konnte nicht geladen werden.");
             };
         } else {
             spinner.style.display = 'none';
