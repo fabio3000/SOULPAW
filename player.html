@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOULPAW | Eternal Echo</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --text-color: #f0f0f0;
+            --accent-color: #9b59b6; /* Das Sound-Lila */
+            --card-bg: #141414;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- LOGO --- */
+        .brand {
+            position: absolute; top: 30px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: white;
+            text-shadow: 0 0 15px rgba(155, 89, 182, 0.5);
+        }
+
+        /* --- PLAYER CARD --- */
+        .player-card {
+            width: 90%;
+            max-width: 400px;
+            background: var(--card-bg);
+            border-radius: 30px;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+        }
+
+        /* --- COVER ART PLACEHOLDER (Die Welle) --- */
+        .visual-container {
+            width: 100%;
+            height: 200px;
+            background: #000;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 1px solid #222;
+        }
+
+        .paw-start {
+            position: absolute; left: 15%; 
+            color: var(--accent-color); 
+            font-size: 1.5rem; 
+            transform: rotate(-10deg);
+            opacity: 0.8;
+        }
+
+        .waveform-svg { width: 100%; height: 100%; margin-left: 5px; }
+        .waveform-path {
+            fill: none; 
+            stroke: var(--accent-color); 
+            stroke-width: 2px;
+            stroke-linecap: round; 
+            stroke-linejoin: round;
+            /* Standardmäßig pausiert! */
+            animation: barkAnimation 1.5s infinite ease-in-out;
+            animation-play-state: paused; 
+        }
+
+        @keyframes barkAnimation {
+            0% { d: path("M0,50 L30,50 L35,50 L40,50 L45,50 L50,50 L55,50 L60,50 L65,50 L70,50 L75,50 L80,50 L100,50"); }
+            10% { d: path("M0,50 L30,50 L35,20 L40,80 L45,10 L50,90 L55,30 L60,70 L65,40 L70,60 L75,50 L80,50 L100,50"); }
+            20% { d: path("M0,50 L30,50 L35,45 L40,55 L45,48 L50,52 L55,50 L60,50 L65,50 L70,50 L75,50 L80,50 L100,50"); }
+            40% { d: path("M0,50 L30,50 L35,50 L40,50 L45,50 L50,50 L55,50 L60,50 L65,50 L70,50 L75,50 L80,50 L100,50"); }
+            100% { d: path("M0,50 L30,50 L35,50 L40,50 L45,50 L50,50 L55,50 L60,50 L65,50 L70,50 L75,50 L80,50 L100,50"); }
+        }
+
+        /* --- TEXT --- */
+        h2 { font-family: 'Cinzel', serif; font-size: 1.5rem; margin-bottom: 5px; }
+        p { color: #888; font-size: 0.9rem; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* --- CONTROLS --- */
+        .play-btn {
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(155, 89, 182, 0.4);
+            transition: 0.2s;
+            display: inline-flex; align-items: center; justify-content: center;
+            padding-left: 5px; /* Optisch mittig */
+        }
+        .play-btn:active { transform: scale(0.95); }
+        
+        /* Wenn Pause ist (Icon wechseln) */
+        .play-btn.playing { padding-left: 0; background: white; color: var(--accent-color); }
+
+        /* --- PROGRESS BAR --- */
+        .progress-container {
+            width: 100%; height: 4px; background: #333;
+            border-radius: 2px; margin-top: 30px; overflow: hidden;
+        }
+        .progress-bar {
+            width: 0%; height: 100%; background: var(--accent-color);
+            transition: width 0.1s linear;
+        }
+
+        /* --- FOOTER --- */
+        .footer-link {
+            margin-top: 40px; opacity: 0.5; font-size: 0.8rem; color: white; text-decoration: none;
+        }
+        
+        /* Error Message */
+        #error-msg { color: #ff4444; display: none; margin-top: 20px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="brand">SOULPAW</div>
+
+    <div class="player-card">
+        <div class="visual-container">
+            <i class="fas fa-paw paw-start"></i>
+            <svg class="waveform-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path id="wave-path" class="waveform-path" d="M0,50 L30,50 L35,50 L40,50 L45,50 L50,50 L55,50 L60,50 L65,50 L70,50 L75,50 L80,50 L100,50" />
+            </svg>
+        </div>
+
+        <h2>The Eternal Echo</h2>
+        <p>Voice of a Soulmate</p>
+
+        <audio id="audio-player" preload="auto"></audio>
+
+        <button class="play-btn" id="play-btn" onclick="togglePlay()">
+            <i class="fas fa-play"></i>
+        </button>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div id="error-msg">Audio-Datei nicht gefunden.</div>
+    </div>
+
+    <a href="index.html" class="footer-link">Create your own at SOULPAW</a>
+
+    <script>
+        // 1. URL Parameter auslesen (?sound=NAME)
+        const urlParams = new URLSearchParams(window.location.search);
+        const soundFile = urlParams.get('sound');
+        
+        const audio = document.getElementById('audio-player');
+        const playBtn = document.getElementById('play-btn');
+        const progressBar = document.getElementById('progress-bar');
+        const wavePath = document.getElementById('wave-path');
+        const icon = playBtn.querySelector('i');
+
+        // 2. Audio laden
+        if (soundFile) {
+            // Wir gehen davon aus, dass die Datei im Ordner "soundfiles" liegt
+            audio.src = "soundfiles/" + soundFile;
+        } else {
+            document.getElementById('error-msg').style.display = 'block';
+            document.querySelector('p').innerText = "No Audio Selected";
+        }
+
+        // 3. Play / Pause Logik
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play().then(() => {
+                    playBtn.classList.add('playing');
+                    icon.classList.remove('fa-play');
+                    icon.classList.add('fa-pause');
+                    // Animation starten
+                    wavePath.style.animationPlayState = 'running';
+                }).catch(e => {
+                    console.error(e);
+                    alert("Datei konnte nicht abgespielt werden. Prüfe den Dateinamen.");
+                });
+            } else {
+                audio.pause();
+                playBtn.classList.remove('playing');
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-play');
+                // Animation stoppen
+                wavePath.style.animationPlayState = 'paused';
+            }
+        }
+
+        // 4. Fortschrittsbalken & Ende
+        audio.addEventListener('timeupdate', () => {
+            const percent = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = percent + "%";
+        });
+
+        audio.addEventListener('ended', () => {
+            playBtn.classList.remove('playing');
+            icon.classList.remove('fa-pause');
+            icon.classList.add('fa-play');
+            wavePath.style.animationPlayState = 'paused';
+            progressBar.style.width = "0%";
+        });
+
+    </script>
+</body>
+</html>
