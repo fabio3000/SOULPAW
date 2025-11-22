@@ -59,10 +59,10 @@
             border-color: rgba(155, 89, 182, 0.3);
         }
 
-        /* --- VISUALIZER --- */
+        /* --- VISUALIZER (Optimiert: Hoch & Gezoomt) --- */
         .visual-container {
             width: 100%;
-            height: 220px;
+            height: 260px; /* Höher für bessere Sichtbarkeit */
             background: #050505;
             border-radius: 20px;
             margin-bottom: 30px;
@@ -71,20 +71,28 @@
             justify-content: center;
             position: relative;
             border: 1px solid #222;
-            overflow: hidden;
-            padding: 10px;
+            overflow: hidden; /* Wichtig für Zoom */
+            padding: 0; /* Kein Innenabstand */
         }
 
         #processed-canvas {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
+            width: 100%;
+            height: 100%;
+            
+            /* Füllt den Bereich komplett aus */
+            object-fit: cover; 
+            
             opacity: 0;
             transition: opacity 0.5s ease, transform 0.2s ease;
-            filter: drop-shadow(0 0 5px rgba(155, 89, 182, 0.5));
+            filter: drop-shadow(0 0 8px rgba(155, 89, 182, 0.8));
+            
+            /* DER ZOOM-TRICK (1.4x) */
+            transform: scale(1.4);
         }
         
-        .playing #processed-canvas { transform: scale(1.02); }
+        .playing #processed-canvas { 
+            transform: scale(1.45); /* Pulsieren beim Abspielen */
+        }
 
         .loading-spinner {
             position: absolute;
@@ -92,7 +100,6 @@
             font-size: 2rem;
         }
 
-        /* IDs hinzugefügt für JS Zugriff */
         h2 { font-family: 'Cinzel', serif; font-size: 1.5rem; margin-bottom: 5px; text-transform: capitalize; }
         p { color: #888; font-size: 0.9rem; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
 
@@ -163,42 +170,32 @@
         const errorMsg = document.getElementById('error-msg');
         const card = document.getElementById('main-card');
 
-        // --- NEUE FUNKTION: NAMEN AUS DATEI ERKENNEN ---
+        // --- NAMENSERKENNUNG ---
         function updateNameFromFilename(filename) {
             if (!filename) return;
-
-            // Dateiendung entfernen (z.B. .m4a)
             let name = filename.substring(0, filename.lastIndexOf('.'));
-            
-            // Decode URI Component falls Leerzeichen als %20 kommen
             name = decodeURIComponent(name);
-
-            // Regex Prüfung: Ist es ein generischer System-Name?
-            // Prüft auf: Startet mit AUDIO, IMG, Zahlen, Datumsmuster (YYYY-MM-DD)
+            
+            // Prüfen ob generisch
             const isGeneric = /^(AUDIO|IMG|DSC|REC|WhatsApp|Video|Sound)|\d{4}-\d{2}-\d{2}|^\d+$/i.test(name);
 
             if (!isGeneric && name.length > 1) {
-                // Es ist wahrscheinlich ein echter Name!
-                
-                // Unterstriche/Bindestriche durch Leerzeichen ersetzen
-                name = name.replace(/[-_]/g, ' ');
-                
-                // Setze den Titel auf den Namen
-                document.getElementById('player-title').innerText = name;
-                document.getElementById('player-subtitle').innerText = "The Eternal Echo";
+                // Schneide ab beim ersten Trennzeichen
+                let cleanName = name.split(/[_ -]/)[0]; 
+                cleanName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
+                document.getElementById('player-title').innerText = cleanName;
             }
         }
 
-        // 1. Audio laden & Name prüfen
+        // 1. Audio
         if (soundFile) {
             audio.src = "soundfiles/" + soundFile;
-            // Versuche Name aus Audio-Datei zu lesen
             updateNameFromFilename(soundFile);
         } else {
             showError("Audio nicht gefunden.");
         }
 
-        // 2. Bild laden & Bearbeiten (Weiß -> Transparent, Schwarz -> Lila)
+        // 2. Bild (Auto-Processing: Weiß->Transparent, Schwarz->Lila)
         if (imageFile) {
             const img = new Image();
             img.crossOrigin = "Anonymous"; 
