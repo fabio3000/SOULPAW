@@ -73,14 +73,17 @@
         .modal-choice { 
             padding: 3rem 2rem; text-align: center; cursor: pointer; transition: 0.3s; 
             border-right: 1px solid rgba(255,255,255,0.05);
-            position: relative; /* Für Sparkles */
+            position: relative;
         }
         .modal-choice:last-child { border-right: none; }
         .modal-choice:hover { filter: brightness(1.2); z-index: 2;}
         
         .choice-sound { background: #1a0520; color: #fff; }
         .choice-astro { background: #fffbf5; color: #2c3e50; }
-        .choice-special { background: #0a0a0a; color: #C5A059; overflow: hidden;}
+        /* Special Container styling */
+        .choice-special { background: #0a0a0a; color: #C5A059; overflow: hidden; position: relative;}
+        /* Inhalte im Special Container etwas abdunkeln */
+        .choice-special .modal-text-wrap, .choice-special i { opacity: 0.6; z-index: 2; position: relative; }
 
         .modal-button-fake {
             display: inline-block; padding: 10px 25px; border-radius: 30px;
@@ -88,62 +91,43 @@
             text-transform: uppercase; margin-top: 20px;
         }
 
-        /* --- SPARKLE ANIMATION (Coming Soon) --- */
+        /* --- NEW JS SPARKLE ANIMATION --- */
+        /* Basis-Stil für einen Stern, Position wird per JS gesetzt */
         .sparkle {
-            position: absolute; width: 2px; height: 2px; background: #fff; border-radius: 50%;
-            opacity: 0; animation: twinkle 3s infinite ease-in-out;
-            box-shadow: 0 0 5px #C5A059;
+            position: absolute;
+            width: 2px; height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            /* Stärkerer goldener Glow */
+            box-shadow: 0 0 4px #C5A059, 0 0 8px #C5A059; 
+            opacity: 0;
+            pointer-events: none; /* Damit sie nicht klickbar sind */
+            z-index: 1;
+            /* Animation Name hier, Dauer und Delay per JS */
+            animation-name: twinkle;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
         }
-        .sparkle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
-        .sparkle:nth-child(2) { top: 80%; left: 80%; animation-delay: 1s; }
-        .sparkle:nth-child(3) { top: 30%; right: 15%; animation-delay: 2s; }
-        .sparkle:nth-child(4) { bottom: 20%; left: 10%; animation-delay: 0.5s; }
         
         @keyframes twinkle {
             0% { opacity: 0; transform: scale(0.5); }
-            50% { opacity: 1; transform: scale(1.5); }
+            50% { opacity: 1; transform: scale(1.4); }
             100% { opacity: 0; transform: scale(0.5); }
         }
 
-        /* --- MOBILE OPTIMIERUNG FÜR MODAL (WICHTIG) --- */
+        /* --- MOBILE OPTIMIERUNG FÜR MODAL --- */
         @media (max-width: 900px) { 
-            .modal-grid { 
-                grid-template-columns: 1fr; /* Untereinander */
-            } 
-            .modal-content-wrapper { 
-                max-height: 85vh; /* Nicht zu hoch */
-                overflow-y: auto; 
-            } 
-            /* Macht aus den großen Boxen kleine Listen-Elemente */
+            .modal-grid { grid-template-columns: 1fr; } 
+            .modal-content-wrapper { max-height: 85vh; overflow-y: auto; } 
             .modal-choice {
-                padding: 1.5rem; /* Weniger Platz */
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                gap: 20px;
-                text-align: left;
-                border-right: none;
-                border-bottom: 1px solid rgba(255,255,255,0.1);
+                padding: 1.5rem; 
+                display: flex; flex-direction: row; align-items: center; gap: 20px;
+                text-align: left; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1);
             }
-            .modal-choice i { 
-                font-size: 2rem !important; /* Kleineres Icon */
-                margin-bottom: 0 !important; 
-                width: 40px; text-align: center;
-            }
-            .modal-choice h2 { 
-                font-size: 1.2rem !important; 
-                margin-bottom: 0 !important; 
-            }
-            .modal-choice p { 
-                font-size: 0.8rem !important; 
-                margin-bottom: 0 !important;
-                opacity: 0.7;
-            }
-            /* Button verstecken oder kleiner machen auf Mobile */
-            .modal-button-fake {
-                display: none; /* Auf Mobile reicht Klick auf die Zeile */
-            }
-            /* Text Container für sauberes Layout */
+            .modal-choice i { font-size: 2rem !important; margin-bottom: 0 !important; width: 40px; text-align: center;}
+            .modal-choice h2 { font-size: 1.2rem !important; margin-bottom: 0 !important; }
+            .modal-choice p { font-size: 0.8rem !important; margin-bottom: 0 !important; opacity: 0.7; }
+            .modal-button-fake { display: none; }
             .modal-text-wrap { flex: 1; }
         }
 
@@ -319,14 +303,12 @@
                         <span class="modal-button-fake" style="background: #c5a059;">Hier starten</span>
                     </div>
                 </div>
-                <div class="modal-choice choice-special" style="opacity: 0.8; cursor: default;">
-                    <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
-                    
+                <div class="modal-choice choice-special" id="special-choice-container" style="cursor: default;">
                     <i class="fas fa-candle-holder" style="color: #C5A059; font-size: 3rem; margin-bottom: 15px;"></i>
                     <div class="modal-text-wrap">
-                        <h2 style="color: #C5A059;">Special Edition</h2>
-                        <p style="color: #C5A059;">Digital Memorial Raum.</p>
-                        <span class="modal-button-fake" style="border: 1px solid #C5A059; background: transparent; color: #C5A059;">Coming Soon</span>
+                        <h2 style="color: #C5A059; letter-spacing: 2px;">COMING SOON</h2>
+                        <p style="color: #C5A059;">Special Edition | Digital Memorial Raum.</p>
+                        <span class="modal-button-fake" style="border: 1px solid #C5A059; background: transparent; color: #C5A059; opacity: 0.5;">In Entwicklung</span>
                     </div>
                 </div>
             </div>
@@ -524,6 +506,22 @@
                 entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('is-visible'); });
             }, { threshold: 0.1 });
             document.querySelectorAll('.fade-in-section').forEach(section => observer.observe(section));
+
+            // --- NEU: ZUFALLS-STERNE GENERIEREN ---
+            const sparkleContainer = document.getElementById('special-choice-container');
+            const numberOfSparkles = 40; // Anzahl der Sterne
+
+            for (let i = 0; i < numberOfSparkles; i++) {
+                let sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                // Zufällige Position
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.left = Math.random() * 100 + '%';
+                // Zufällige Verzögerung und Dauer für natürliches Funkeln
+                sparkle.style.animationDelay = Math.random() * 5 + 's';
+                sparkle.style.animationDuration = (Math.random() * 3 + 2) + 's'; // Zwischen 2 und 5 Sekunden
+                sparkleContainer.appendChild(sparkle);
+            }
         });
 
         function switchModeAndCloseModal(mode) {
