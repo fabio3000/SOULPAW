@@ -551,7 +551,175 @@
         let hasCalculated = false;
         let uploadedImageSrc = null; 
 
-        // --- IMAGE CHECKER ---
+        // --- 1. ASTROLOGISCHE DATENBANK ---
+        const zodiacSigns = [
+            { nameDe: "Steinbock", nameEn: "Capricorn", element: "earth", start: [1, 1], end: [1, 19] },
+            { nameDe: "Wassermann", nameEn: "Aquarius", element: "air", start: [1, 20], end: [2, 18] },
+            { nameDe: "Fische", nameEn: "Pisces", element: "water", start: [2, 19], end: [3, 20] },
+            { nameDe: "Widder", nameEn: "Aries", element: "fire", start: [3, 21], end: [4, 19] },
+            { nameDe: "Stier", nameEn: "Taurus", element: "earth", start: [4, 20], end: [5, 20] },
+            { nameDe: "Zwillinge", nameEn: "Gemini", element: "air", start: [5, 21], end: [6, 20] },
+            { nameDe: "Krebs", nameEn: "Cancer", element: "water", start: [6, 21], end: [7, 22] },
+            { nameDe: "Löwe", nameEn: "Leo", element: "fire", start: [7, 23], end: [8, 22] },
+            { nameDe: "Jungfrau", nameEn: "Virgo", element: "earth", start: [8, 23], end: [9, 22] },
+            { nameDe: "Waage", nameEn: "Libra", element: "air", start: [9, 23], end: [10, 22] },
+            { nameDe: "Skorpion", nameEn: "Scorpio", element: "water", start: [10, 23], end: [11, 21] },
+            { nameDe: "Schütze", nameEn: "Sagittarius", element: "fire", start: [11, 22], end: [12, 21] },
+            { nameDe: "Steinbock", nameEn: "Capricorn", element: "earth", start: [12, 22], end: [12, 31] }
+        ];
+
+        // --- 2. HILFSFUNKTIONEN ---
+        
+        function getZodiac(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate();
+            const month = date.getMonth() + 1; // JS Monate sind 0-11
+            
+            // Finde das Sternzeichen basierend auf Tag/Monat
+            return zodiacSigns.find(z => {
+                return (month === z.start[0] && day >= z.start[1]) || 
+                       (month === z.end[0] && day <= z.end[1]);
+            });
+        }
+
+        function calculateNumerology(dateString) {
+            // Entferne Bindestriche und addiere alle Ziffern
+            let digits = dateString.replace(/-/g, '').split('').map(Number);
+            let sum = digits.reduce((a, b) => a + b, 0);
+            
+            // Reduziere auf eine Ziffer (außer 11, 22, 33 - Meisterzahlen, hier vereinfacht)
+            while (sum > 9 && sum !== 11 && sum !== 22) {
+                sum = sum.toString().split('').map(Number).reduce((a, b) => a + b, 0);
+            }
+            return sum;
+        }
+
+        function getMatchScore(el1, el2) {
+            // Logik: Gleiche Elemente = Super, Komplementäre = Gut
+            if (el1 === el2) return { score: 98, textDe: "Seelenverwandte Elemente", textEn: "Soulmate Elements" };
+            
+            // Gute Kombis: Feuer+Luft, Erde+Wasser
+            if ((el1 === 'fire' && el2 === 'air') || (el1 === 'air' && el2 === 'fire')) return { score: 92, textDe: "Perfekte Harmonie", textEn: "Perfect Harmony" };
+            if ((el1 === 'earth' && el2 === 'water') || (el1 === 'water' && el2 === 'earth')) return { score: 94, textDe: "Tiefe Verbindung", textEn: "Deep Connection" };
+            
+            // Spannende Kombis (Gegensätze)
+            return { score: 85, textDe: "Magische Anziehung", textEn: "Magical Attraction" };
+        }
+
+        // --- 3. HAUPTLOGIK ---
+
+        function calculateDeterministicKarma() {
+            if(hasCalculated) return;
+            const hDate = document.getElementById('dateHuman').value;
+            const dDate = document.getElementById('dateDog').value;
+            const btn = document.getElementById('calcBtn');
+            const output = document.getElementById('tech-output');
+            const lang = navigator.language.startsWith('de') ? 'de' : 'en';
+
+            if(!hDate || !dDate) { 
+                alert(lang === 'de' ? "Bitte beide Geburtstage eingeben." : "Please enter both birthdays."); 
+                return; 
+            }
+            
+            // Echte Astro Daten holen
+            const humanSign = getZodiac(hDate);
+            const dogSign = getZodiac(dDate);
+            const humanNum = calculateNumerology(hDate);
+            const dogNum = calculateNumerology(dDate);
+            
+            hasCalculated = true;
+            btn.disabled = true;
+            btn.style.opacity = "0.5";
+            btn.innerText = lang === 'de' ? "Berechne Sternenkarte..." : "Calculating Star Chart...";
+            
+            // Ladebalken starten
+            document.getElementById('calc-loader').style.display = 'block';
+            const fill = document.getElementById('loader-fill');
+            const text = document.getElementById('loader-text');
+            
+            // Simulation der Berechnungsschritte (für Spannung)
+            let progress = 0;
+            const stepsDe = [
+                `Analysiere ${humanSign.nameDe} & ${dogSign.nameDe}...`,
+                `Prüfe Elemente: ${humanSign.element.toUpperCase()} + ${dogSign.element.toUpperCase()}...`,
+                `Numerologie: ${humanNum} trifft auf ${dogNum}...`,
+                "Finalisiere Seelen-Chart..."
+            ];
+            const stepsEn = [
+                `Analyzing ${humanSign.nameEn} & ${dogSign.nameEn}...`,
+                `Checking Elements: ${humanSign.element.toUpperCase()} + ${dogSign.element.toUpperCase()}...`,
+                `Numerology: ${humanNum} meets ${dogNum}...`,
+                "Finalizing Soul Chart..."
+            ];
+            let steps = lang === 'de' ? stepsDe : stepsEn;
+
+            const interval = setInterval(() => {
+                progress += 1;
+                fill.style.width = progress + '%';
+                
+                if(progress < 25) text.innerText = "> " + steps[0];
+                else if(progress < 50) text.innerText = "> " + steps[1];
+                else if(progress < 75) text.innerText = "> " + steps[2];
+                else text.innerText = "> " + steps[3];
+
+                if(progress >= 100) {
+                    clearInterval(interval);
+                    showRealResults(humanSign, dogSign, humanNum, dogNum);
+                }
+            }, 50); // Dauer ca 5 Sekunden
+        }
+
+        function showRealResults(hSign, dSign, hNum, dNum) {
+            const lang = navigator.language.startsWith('de') ? 'de' : 'en';
+            
+            // Match Berechnen
+            const match = getMatchScore(hSign.element, dSign.element);
+            
+            // UI Update
+            document.getElementById('calcBtn').style.display = 'none';
+            document.getElementById('tech-output').style.display = 'none';
+            document.getElementById('calc-loader').style.display = 'none';
+            document.getElementById('karma-result').style.display = 'block';
+
+            // Aura Logik (Bleibt wie vorher, da es keine echten Daten für Aura gibt)
+            if(document.getElementById('aura-check').checked && uploadedImageSrc) {
+                document.getElementById('aura-result-box').style.display = 'block';
+                document.getElementById('uploaded-dog-img').src = uploadedImageSrc;
+                document.getElementById('aura-text-desc').style.display = 'block';
+                
+                // Aura Farbe passend zum Element des Hundes wählen!
+                let auraColor = "#fff";
+                let auraName = "";
+                if(dSign.element === 'fire') { auraColor = "#ff4d4d"; auraName = lang==='de'?"Rot (Feuer-Energie)":"Red (Fire Energy)"; }
+                if(dSign.element === 'water') { auraColor = "#00d2ff"; auraName = lang==='de'?"Blau (Wasser-Seele)":"Blue (Water Soul)"; }
+                if(dSign.element === 'earth') { auraColor = "#2ecc71"; auraName = lang==='de'?"Grün (Erd-Kraft)":"Green (Earth Power)"; }
+                if(dSign.element === 'air') { auraColor = "#f1c40f"; auraName = lang==='de'?"Gold (Luft-Geist)":"Gold (Air Spirit)"; }
+
+                document.getElementById('aura-overlay-layer').style.background = `radial-gradient(circle, ${auraColor} 0%, transparent 70%)`;
+                document.getElementById('aura-text-desc').innerText = "✨ Aura: " + auraName;
+            }
+
+            // Texte setzen
+            document.getElementById('result-percent').innerText = match.score + "% MATCH";
+            
+            // Text basierend auf den ECHTEN Sternzeichen
+            const signName1 = lang === 'de' ? hSign.nameDe : hSign.nameEn;
+            const signName2 = lang === 'de' ? dSign.nameDe : dSign.nameEn;
+            
+            document.getElementById('result-archetype').innerText = `${signName1} + ${signName2}`;
+            
+            // Der "Blurred" Teaser Text (wird jetzt dynamisch)
+            const teaserDe = `Die Verbindung zwischen ${signName1} und ${signName2} ist einzigartig. Eure Lebenszahlen ${hNum} und ${dNum} schwingen auf einer Frequenz, die...`;
+            const teaserEn = `The connection between ${signName1} and ${signName2} is unique. Your life path numbers ${hNum} and ${dNum} resonate at a frequency that...`;
+            
+            document.querySelector('.blurred-text').innerText = lang === 'de' ? teaserDe : teaserEn;
+            
+            document.getElementById('karma-result').scrollIntoView({behavior: "smooth", block: "center"});
+        }
+        
+        // --- RESTLICHE FUNKTIONEN (Modal, Switcher, etc.) BLEIBEN GLEICH ---
+        
+        // Image Checker Helper
         function tryLoadImage(id, url, defaultId) {
             const img = new Image();
             img.src = url;
@@ -603,9 +771,6 @@
                 "t-prod-karma-desc": "Deine persönliche Analyse auf 310g Fine Art Papier.",
                 "t-btn-order-now": "Jetzt bestellen",
                 "t-testi-title": "Love Notes",
-                "t-nl-title": "Join the VIP Circle",
-                "t-nl-desc": "Erhalte exklusiven Zugang zu neuen Drops und seelenvollen Insights.",
-                "t-nl-btn": "BEITRETEN",
                 "t-faq-title": "Häufige Fragen",
                 "t-faq-s1-q": "Wie mache ich die perfekte Aufnahme?",
                 "t-faq-s1-a": "Am besten in einem ruhigen Raum. Halte das Handy-Mikrofon ca. 30cm entfernt und versuche, ein einzelnes, klares \"Wuff\" aufzunehmen. Eine Videoaufnahme funktioniert genauso gut!",
@@ -623,7 +788,13 @@
                 "order-desc": "Wähle dein Produkt direkt in unserem Shop.",
                 "t-shop-title": "Zum SOULPAW Shop",
                 "t-shop-desc": "Unser Shop öffnet sich in einem neuen Fenster, um dir die sicherste Bestellung zu garantieren.",
-                "t-btn-open-shop": 'Jetzt Shop öffnen <i class="fas fa-external-link-alt" style="margin-left:8px;"></i>'
+                "t-btn-open-shop": 'Jetzt Shop öffnen <i class="fas fa-external-link-alt" style="margin-left:8px;"></i>',
+                "t-testi-1": "\"Die schönste Erinnerung an meinen Balu. Ich habe geweint, als ich den Code gescannt habe.\"",
+                "t-testi-2": "\"Die Astro-Analyse war unheimlich genau. Es erklärt so vieles!\"",
+                "t-testi-3": "\"Ich habe die Tattoo-Vorlage geholt und mein Tätowierer liebte die feinen Linien.\"",
+                "t-nl-title": "Join the VIP Circle",
+                "t-nl-desc": "Erhalte exklusiven Zugang zu neuen Drops und seelenvollen Insights.",
+                "t-nl-btn": "BEITRETEN"
             },
             en: {
                 "t-modal-title": "Choose Your Path",
@@ -664,9 +835,6 @@
                 "t-prod-karma-desc": "Your personal analysis on 310g fine art paper.",
                 "t-btn-order-now": "Order Now",
                 "t-testi-title": "Love Notes",
-                "t-nl-title": "Join the VIP Circle",
-                "t-nl-desc": "Get exclusive access to new drops and soulful insights.",
-                "t-nl-btn": "JOIN",
                 "t-faq-title": "Frequently Asked Questions",
                 "t-faq-s1-q": "How do I make the perfect recording?",
                 "t-faq-s1-a": "Best in a quiet room. Hold the phone microphone about 30cm away and try to record a single, clear \"woof\". A video recording works just as well!",
@@ -684,20 +852,30 @@
                 "order-desc": "Choose your product directly in our shop.",
                 "t-shop-title": "Go to SOULPAW Shop",
                 "t-shop-desc": "Our shop opens in a new window to guarantee you the safest ordering process.",
-                "t-btn-open-shop": 'Open Shop Now <i class="fas fa-external-link-alt" style="margin-left:8px;"></i>'
+                "t-btn-open-shop": 'Open Shop Now <i class="fas fa-external-link-alt" style="margin-left:8px;"></i>',
+                "t-testi-1": "\"The most beautiful memory of my Balu. I cried when I scanned the code.\"",
+                "t-testi-2": "\"The Astro-Analysis was scary accurate. It explains so much!\"",
+                "t-testi-3": "\"I got the tattoo template and my artist loved the clean lines.\"",
+                "t-nl-title": "Join the VIP Circle",
+                "t-nl-desc": "Get exclusive access to new drops and soulful insights.",
+                "t-nl-btn": "JOIN"
             }
         };
 
         function detectAndApplyLanguage() {
             const userLang = navigator.language || navigator.userLanguage;
+            // Prüfe ob Sprache mit "de" beginnt (de, de-AT, de-CH, etc.)
             const langKey = userLang.startsWith('de') ? 'de' : 'en';
             
+            console.log("Detected Language:", userLang, "-> Applied:", langKey);
+
             // Gehe durch das Dictionary und ersetze Texte
             for (const [key, value] of Object.entries(translations[langKey])) {
                 const elements = document.querySelectorAll('.' + key);
                 elements.forEach(el => {
-                    el.innerHTML = value; 
+                    el.innerHTML = value; // innerHTML statt innerText für HTML im String (z.B. <br> oder icons)
                 });
+                // Spezialfall für IDs (falls vorhanden)
                 const elementById = document.getElementById(key);
                 if (elementById) elementById.innerHTML = value;
             }
@@ -706,10 +884,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             // 1. Sprache erkennen und anwenden
             detectAndApplyLanguage();
-
-            // Try loading images
-            tryLoadImage('img-poster', 'images/interativesposter.png', 'visual-poster-default');
-            tryLoadImage('img-karma', 'images/karmachart.png', 'visual-karma-default');
 
             const hash = window.location.hash;
             if (hash === '#astro') switchMode('astro');
@@ -724,15 +898,19 @@
             }, { threshold: 0.1 });
             document.querySelectorAll('.fade-in-section').forEach(section => observer.observe(section));
 
-            // Stars
+            // --- REALISTISCHE ZUFALLS-STERNE (Lens Flare) ---
             const sparkleContainer = document.getElementById('special-choice-container');
-            for (let i = 0; i < 40; i++) {
+            const numberOfSparkles = 35; // Anzahl der Sterne
+
+            for (let i = 0; i < numberOfSparkles; i++) {
                 let sparkle = document.createElement('div');
                 sparkle.className = 'realistic-sparkle';
+                // Zufällige Position
                 sparkle.style.top = Math.random() * 100 + '%';
                 sparkle.style.left = Math.random() * 100 + '%';
+                // Zufällige Verzögerung und Dauer für natürliches Funkeln
                 sparkle.style.animationDelay = Math.random() * 5 + 's';
-                sparkle.style.animationDuration = (Math.random() * 2 + 1.5) + 's'; 
+                sparkle.style.animationDuration = (Math.random() * 2 + 1.5) + 's'; // Zwischen 1.5 und 3.5 Sekunden
                 sparkleContainer.appendChild(sparkle);
             }
         });
@@ -751,14 +929,8 @@
             const heroAstro = document.getElementById('hero-astro');
             const sectionSound = document.getElementById('content-sound');
             const sectionAstro = document.getElementById('content-astro');
-            
-            // Switch Reviews
-            document.getElementById('reviews-sound').style.display = (mode === 'sound') ? 'flex' : 'none';
-            document.getElementById('reviews-astro').style.display = (mode === 'astro') ? 'flex' : 'none';
-
-            // Switch FAQ
-            document.getElementById('faq-sound').style.display = (mode === 'sound') ? 'block' : 'none';
-            document.getElementById('faq-astro').style.display = (mode === 'astro') ? 'block' : 'none';
+            const orderTitle = document.getElementById('order-title');
+            const orderDesc = document.getElementById('order-desc');
 
             btns.forEach(b => b.classList.remove('active'));
 
@@ -767,47 +939,47 @@
                 btns[1].classList.add('active');
                 heroSound.style.display = 'none'; heroAstro.style.display = 'block';
                 sectionSound.classList.remove('active'); sectionAstro.classList.add('active');
+                
+                // Texte dynamisch anhand der Sprache aktualisieren
+                const lang = navigator.language.startsWith('de') ? 'de' : 'en';
+                orderTitle.innerText = lang === 'de' ? "Kosmische Daten freischalten" : "Unlock Cosmic Data";
+                orderDesc.innerText = lang === 'de' ? "Bestelle deine detaillierte Analyse." : "Order your detailed analysis.";
+                
                 window.location.hash = 'astro';
             } else {
                 body.classList.remove('astro-mode');
                 btns[0].classList.add('active');
                 heroSound.style.display = 'block'; heroAstro.style.display = 'none';
                 sectionSound.classList.add('active'); sectionAstro.classList.remove('active');
+
+                // Texte zurücksetzen
+                const lang = navigator.language.startsWith('de') ? 'de' : 'en';
+                orderTitle.innerText = translations[lang]["order-title"];
+                orderDesc.innerText = translations[lang]["order-desc"];
+
                 window.location.hash = 'sound';
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // ... (Rest of logic remains same: Upload, Calc etc.) ...
+        // --- TOGGLE UPLOAD ---
         function toggleUploadVisibility() {
             const chk = document.getElementById('aura-check');
-            document.getElementById('upload-wrapper').style.display = chk.checked ? 'block' : 'none';
+            const wrapper = document.getElementById('upload-wrapper');
+            wrapper.style.display = chk.checked ? 'block' : 'none';
         }
+
+        // --- FILE UPLOAD HANDLER ---
         function handleFileSelect(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function (e) {
                     uploadedImageSrc = e.target.result;
-                    document.getElementById('file-name-display').innerText = "Bild ausgewählt";
+                    const lang = navigator.language.startsWith('de') ? 'de' : 'en';
+                    document.getElementById('file-name-display').innerText = (lang === 'de' ? "Bild ausgewählt: " : "Image selected: ") + input.files[0].name;
                 };
                 reader.readAsDataURL(input.files[0]);
             }
-        }
-        function calculateDeterministicKarma() {
-             // ... same ...
-             // Simulating result for brevity in this snippet
-             showResults('2020-01-01', '2020-01-01');
-        }
-        function showResults(d1, d2) {
-            document.getElementById('karma-result').style.display = 'block';
-            if(document.getElementById('aura-check').checked && uploadedImageSrc) {
-                document.getElementById('aura-result-box').style.display = 'block';
-                document.getElementById('uploaded-dog-img').src = uploadedImageSrc;
-                document.getElementById('aura-text-desc').style.display = 'block';
-                document.getElementById('aura-text-desc').innerText = "✨ Energetische Aura: Mystic Violet";
-            }
-            document.getElementById('result-percent').innerText = "98% MATCH";
-            document.getElementById('result-archetype').innerText = "ARCHETYP: THE PROTECTOR";
         }
         
         document.addEventListener('mousemove', function(e) {
@@ -821,17 +993,14 @@
                 setTimeout(() => { dust.remove(); }, 800);
             }
         });
-        
-        // Image Checker Helper
-        function tryLoadImage(id, url, defaultId) {
-            const img = new Image();
-            img.src = url;
-            img.onload = () => { 
-                document.getElementById(id).src = url; 
-                document.getElementById(id).style.display = 'block'; 
-                document.getElementById(defaultId).style.display = 'none'; 
-            };
-        }
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if(target) target.scrollIntoView({behavior: 'smooth', block: 'start'});
+            });
+        });
     </script>
 </body>
 </html>
