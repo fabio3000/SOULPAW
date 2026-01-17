@@ -2,350 +2,325 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SOULPAW | Atelier für Hundeliebe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOULPAW | Atelier</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,400&family=Mulish:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400&family=Homemade+Apple&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --bg-body: #F2F0E9; /* Sehr warmes Hellgrau/Beige */
-            --bg-card: #FFFFFF;
-            --text-main: #5C554B; /* Weiches Dunkelbraun statt Schwarz */
-            --accent: #A68A64; /* Edles Camel/Gold */
-            --accent-soft: #E8E1D5;
-            --radius: 30px; /* Große, weiche Radien */
+            --bg: #F9F8F6; /* Papier-Weiß/Creme */
+            --ink: #2b2b2b; /* Tinte (kein hartes Schwarz) */
+            --gold: #C5A059;
+            --line: rgba(0,0,0,0.08);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Mulish', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            height: 100vh; /* Volle Höhe */
+            background-color: var(--bg);
+            color: var(--ink);
+            font-family: 'Lato', sans-serif;
+            height: 100vh;
+            overflow: hidden; /* Kein Scrollen - alles auf einem Blick */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center;
+            padding-top: 40px;
+            padding-bottom: 20px;
+            flex-shrink: 0;
+        }
+        .brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 400;
+        }
+        .subtitle {
+            font-family: 'Homemade Apple', cursive;
+            color: var(--gold);
+            font-size: 1rem;
+            margin-top: -5px;
+            transform: rotate(-2deg);
+            display: inline-block;
+        }
+
+        /* --- SHOP WINDOW (MAIN AREA) --- */
+        .shop-window {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            padding: 20px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* --- PRODUCT CARD (Der "Rahmen") --- */
+        .product-card {
+            width: 300px;
+            height: 450px;
+            background: #fff;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            border: 1px solid #fff; /* Unsichtbarer Rand */
+        }
+
+        /* Hover Effekt: Wie wenn man ein Bild im Atelier betrachtet */
+        .product-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.08);
+            border-color: var(--gold);
+        }
+
+        /* --- VISUAL AREA (Das Bild im Rahmen) --- */
+        .visual-area {
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden; /* Kein Scrollen der Hauptseite */
-        }
-
-        /* --- LAYOUT CONTAINER (Die "Karte") --- */
-        .main-container {
-            width: 95%;
-            max-width: 1200px;
-            height: 90vh;
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            box-shadow: 0 30px 60px rgba(92, 85, 75, 0.1);
-            display: grid;
-            grid-template-columns: 45% 55%; /* Links Bild, Rechts Inhalt */
-            overflow: hidden;
+            padding: 20px;
+            background: #FAFAFA;
             position: relative;
-        }
-
-        /* --- LINKE SEITE: VISUAL --- */
-        .visual-side {
-            position: relative;
-            background-color: var(--accent-soft);
             overflow: hidden;
         }
-        
-        .visual-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.8s ease;
+
+        .product-img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+            transition: 0.5s;
         }
 
-        /* Einzigartiges Detail: Ein "Sticker" auf dem Bild */
-        .brand-badge {
-            position: absolute;
-            top: 30px;
-            left: 30px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 15px 25px;
-            border-radius: 50px;
-            backdrop-filter: blur(5px);
-            font-family: 'Fraunces', serif;
-            font-weight: 600;
-            font-size: 1.2rem;
-            color: var(--text-main);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            z-index: 10;
+        /* Spezial-Effekte für die "Linien" */
+        .sketch-lines {
+            width: 150px; height: 80px;
+        }
+        .sketch-path {
+            fill: none; stroke: var(--ink); stroke-width: 1.5;
+            stroke-dasharray: 300; stroke-dashoffset: 0;
+            animation: draw 3s ease-in-out infinite alternate;
+        }
+        @keyframes draw { from { stroke-dashoffset: 300; } to { stroke-dashoffset: 0; } }
+
+        /* --- DETAILS AREA (Text unten) --- */
+        .details-area {
+            padding: 25px;
+            text-align: center;
+            background: #fff;
+            border-top: 1px solid var(--line);
         }
 
-        /* --- RECHTE SEITE: INTERAKTION --- */
-        .content-side {
-            padding: 40px 60px;
-            display: flex;
-            flex-direction: column;
-            position: relative;
+        .p-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            margin-bottom: 5px;
+            color: var(--ink);
         }
-
-        /* NAVIGATION (Tabs oben) */
-        .nav-tabs {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 20px;
-        }
-
-        .tab-btn {
-            background: transparent;
-            border: none;
-            font-family: 'Mulish', sans-serif;
-            font-weight: 700;
-            font-size: 0.9rem;
-            color: #999;
-            cursor: pointer;
-            padding: 10px 20px;
-            border-radius: 20px;
-            transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .tab-btn.active {
-            background: var(--accent-soft);
-            color: var(--text-main);
-        }
-        .tab-btn:hover { color: var(--accent); }
-
-        /* CONTENT AREA (Scrollbar nur hier drin, falls nötig) */
-        .content-area {
-            flex: 1;
-            overflow-y: auto; /* Scrollen nur im Textbereich */
-            padding-right: 10px; /* Platz für Scrollbar */
-            display: none; /* Standardmäßig ausgeblendet */
-            animation: fadeIn 0.5s ease;
-        }
-        .content-area.active { display: block; }
-
-        /* Scrollbar Styling */
-        .content-area::-webkit-scrollbar { width: 6px; }
-        .content-area::-webkit-scrollbar-thumb { background: #eee; border-radius: 10px; }
-
-        /* TYPOGRAPHY */
-        h1 {
-            font-family: 'Fraunces', serif;
-            font-size: 3rem;
-            line-height: 1.1;
-            margin-bottom: 20px;
-            color: var(--text-main);
+        .p-desc {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 15px;
             font-weight: 300;
         }
-        h1 i { font-style: italic; color: var(--accent); }
-        
-        p { line-height: 1.8; color: #888; margin-bottom: 25px; font-size: 1.05rem; }
+        .p-price {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--gold);
+        }
 
-        /* BUTTONS & CARDS */
-        .btn-primary {
-            display: inline-block;
-            background: var(--text-main);
+        /* --- TAGS (Handschriftliche Notizen) --- */
+        .tag {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--gold);
             color: #fff;
-            padding: 18px 40px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 5px 12px;
+            z-index: 10;
+            box-shadow: 0 5px 15px rgba(197, 160, 89, 0.3);
+        }
+
+        /* --- MODAL (Kauf-Fenster) --- */
+        .atelier-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            display: none;
+            align-items: center; justify-content: center;
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal-box {
+            background: #fff;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            border: 1px solid var(--line);
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute; top: 20px; right: 20px;
+            cursor: pointer; font-size: 1.5rem; color: #ccc;
             transition: 0.3s;
-            box-shadow: 0 10px 20px rgba(92, 85, 75, 0.2);
         }
-        .btn-primary:hover { transform: translateY(-3px); background: var(--accent); }
+        .close-btn:hover { color: var(--ink); }
 
-        .feature-box {
-            background: #FAFAFA;
-            border: 1px solid #EEE;
-            padding: 25px;
-            border-radius: 20px;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            transition: 0.3s;
-            cursor: pointer;
+        .btn-shop {
+            display: inline-block; margin-top: 20px;
+            background: var(--ink); color: #fff;
+            padding: 15px 40px; text-decoration: none;
+            text-transform: uppercase; letter-spacing: 2px;
+            font-size: 0.8rem; transition: 0.3s;
+            border: 1px solid var(--ink);
         }
-        .feature-box:hover { border-color: var(--accent); background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
-        .feature-icon {
-            font-size: 1.5rem; color: var(--accent); background: #fff; 
-            width: 50px; height: 50px; border-radius: 50%; display: flex; 
-            align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
+        .btn-shop:hover { background: #fff; color: var(--ink); }
 
-        /* INPUTS (Astro) */
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 5px; color: var(--accent); }
-        input[type="date"] {
-            width: 100%; padding: 15px; border-radius: 15px; border: 1px solid #eee;
-            font-family: 'Mulish', sans-serif; background: #fafafa;
-        }
-
-        /* --- MOBILE OPTIMIERUNG --- */
+        /* --- RESPONSIVE (Handy: Untereinander, aber scrollbar im Container) --- */
         @media (max-width: 900px) {
-            .main-container {
-                grid-template-columns: 1fr;
-                grid-template-rows: 35% 65%; /* Bild oben, Inhalt unten */
-                height: 100vh;
-                width: 100%;
-                border-radius: 0;
-            }
-            .brand-badge { top: 20px; left: 20px; padding: 10px 20px; font-size: 1rem; }
-            .content-side { padding: 30px 25px; border-radius: 30px 30px 0 0; margin-top: -30px; background: #fff; z-index: 10; }
-            h1 { font-size: 2rem; }
-            .nav-tabs { overflow-x: auto; white-space: nowrap; }
+            body { overflow: auto; height: auto; }
+            .shop-window { flex-direction: column; padding: 40px 20px; gap: 30px; }
+            .product-card { width: 100%; height: auto; min-height: 400px; }
+            .visual-area { min-height: 250px; }
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
     </style>
 </head>
 <body>
 
-    <div class="main-container">
-        
-        <div class="visual-side">
-            <div class="brand-badge"><i class="fas fa-paw"></i> Soulpaw</div>
-            <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=2070&auto=format&fit=crop" class="visual-img" id="hero-img">
+    <header>
+        <div class="brand">Soulpaw</div>
+        <div class="subtitle">Atelier für Erinnerungen</div>
+    </header>
+
+    <div class="shop-window">
+
+        <div class="product-card" onclick="openModal('tattoo')">
+            <span class="tag">Digital</span>
+            <div class="visual-area">
+                <svg class="sketch-lines" viewBox="0 0 150 80">
+                    <path class="sketch-path" d="M10,40 Q40,10 75,40 T140,40" />
+                </svg>
+                <i class="fas fa-pen-fancy" style="position:absolute; bottom:20px; right:20px; color:#ddd;"></i>
+            </div>
+            <div class="details-area">
+                <h2 class="p-title">Die Linie</h2>
+                <p class="p-desc">Handgezeichnete Tattoo-Vorlage.<br>Nur die reine Frequenz.</p>
+                <div class="p-price">ab 29 €</div>
+            </div>
         </div>
 
-        <div class="content-side">
+        <div class="product-card" onclick="openModal('poster')">
+            <span class="tag">Bestseller</span>
+            <div class="visual-area" style="background:#f4f4f4;">
+                <div style="width:160px; height:220px; background:#fff; border:8px solid #222; box-shadow:0 10px 20px rgba(0,0,0,0.1); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px;">
+                    <svg width="100%" height="40" viewBox="0 0 100 40"><path d="M0,20 Q25,0 50,20 T100,20" fill="none" stroke="#222" stroke-width="1"/></svg>
+                    <div style="margin-top:20px; font-size:0.6rem; color:#ccc;">+ Optional QR</div>
+                    <i class="fas fa-qrcode" style="font-size:1.5rem; margin-top:5px; color:#222;"></i>
+                </div>
+            </div>
+            <div class="details-area">
+                <h2 class="p-title">Das Poster</h2>
+                <p class="p-desc">Museumspapier. Mit oder ohne QR-Code.<br>Zeitloses Design.</p>
+                <div class="p-price">ab 49 €</div>
+            </div>
+        </div>
+
+        <div class="product-card" onclick="openModal('karma')">
+            <span class="tag">Neu</span>
+            <div class="visual-area">
+                <div style="width:180px; height:180px; border:1px solid var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; position:relative;">
+                    <i class="fas fa-star-of-life" style="color:var(--gold); font-size:1.2rem;"></i>
+                    <div style="position:absolute; top:10px; font-size:0.5rem; text-transform:uppercase; letter-spacing:2px; color:var(--gold);">Karma Chart</div>
+                </div>
+            </div>
+            <div class="details-area">
+                <h2 class="p-title">Karma Chart</h2>
+                <p class="p-desc">Eure Seelenverbindung berechnet.<br>Astrologische Analyse.</p>
+                <div class="p-price">ab 39 €</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="text-align:center; padding-bottom:20px; font-size:0.8rem; opacity:0.6;">
+        <i class="fas fa-heart"></i> Handgefertigt in Köln.
+    </div>
+
+    <div class="atelier-modal" id="product-modal">
+        <div class="modal-box">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="m-title" class="p-title" style="font-size:2rem;">Produkt</h2>
+            <p id="m-desc" class="p-desc" style="font-size:1rem; margin-top:10px;">Beschreibung</p>
             
-            <nav class="nav-tabs">
-                <button class="tab-btn active" onclick="openTab('home')">Start</button>
-                <button class="tab-btn" onclick="openTab('sound')">Stimme</button>
-                <button class="tab-btn" onclick="openTab('astro')">Sterne</button>
-                <button class="tab-btn" onclick="openTab('shop')">Shop</button>
-            </nav>
-
-            <div id="tab-home" class="content-area active">
-                <h1>Willkommen <br><i>zuhause.</i></h1>
-                <p>Wir glauben, dass die Verbindung zu deinem Hund etwas Heiliges ist. In unserem kleinen Atelier in Köln fertigen wir Erinnerungen, die so einzigartig sind wie eure Freundschaft.</p>
-                <p>Was möchtest du heute entdecken?</p>
-                
-                <div class="feature-box" onclick="openTab('sound')">
-                    <div class="feature-icon"><i class="fas fa-wave-square"></i></div>
-                    <div>
-                        <strong style="display:block; font-family:'Fraunces', serif;">Soundwave Art</strong>
-                        <span style="font-size:0.85rem; color:#999;">Verwandle Bellen in Kunst.</span>
-                    </div>
+            <div id="m-extra" style="margin: 20px 0; padding: 20px; background: #fafafa; border-radius: 5px; font-size: 0.9rem; text-align: left;">
                 </div>
 
-                <div class="feature-box" onclick="openTab('astro')">
-                    <div class="feature-icon"><i class="fas fa-star"></i></div>
-                    <div>
-                        <strong style="display:block; font-family:'Fraunces', serif;">Astro & Aura</strong>
-                        <span style="font-size:0.85rem; color:#999;">Eure kosmische Verbindung.</span>
-                    </div>
-                </div>
-            </div>
-
-            <div id="tab-sound" class="content-area">
-                <h1>Für immer <br><i>gehört werden.</i></h1>
-                <p>Das Bellen, das dich begrüßt, wenn du nach Hause kommst. Wir zeichnen diese Schallwelle von Hand nach und drucken sie auf feinstes Museumspapier.</p>
-                
-                <div style="background:#fdfbf7; padding:20px; border-radius:20px; margin-bottom:20px; text-align:center;">
-                    <svg width="100%" height="60" viewBox="0 0 200 60">
-                        <path d="M0,30 Q20,30 30,10 T50,30 T70,50 T100,10 T130,30 T160,30 T200,30" fill="none" stroke="#A68A64" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                    <small style="display:block; margin-top:10px; color:#A68A64;">Handgezeichnete Feinlinie</small>
-                </div>
-
-                <a href="#" onclick="openTab('shop')" class="btn-primary">Unikat gestalten</a>
-            </div>
-
-            <div id="tab-astro" class="content-area">
-                <h1>Steht es in den <br><i>Sternen?</i></h1>
-                <p>Verrate uns eure Geburtstage. Unser kleiner Algorithmus "Cosmic Bond" berechnet, wie eure Seelen zusammenspielen.</p>
-                
-                <div style="background:#fff; padding:20px; border-radius:20px; border:1px solid #eee;">
-                    <div class="input-group">
-                        <label>Dein Geburtstag</label>
-                        <input type="date" id="dateHuman">
-                    </div>
-                    <div class="input-group">
-                        <label>Geburtstag der Fellnase</label>
-                        <input type="date" id="dateDog">
-                    </div>
-                    <button class="btn-primary" style="width:100%; padding:15px;" onclick="calcLove()">Verbindung berechnen</button>
-                </div>
-
-                <div id="astro-result" style="display:none; margin-top:20px; text-align:center;">
-                    <h2 style="font-family:'Fraunces'; color:var(--accent); font-size:2rem;">98% Match</h2>
-                    <p>Ihr seid Seelenverwandte. <br>Mehr dazu im Karma-Chart.</p>
-                </div>
-            </div>
-
-            <div id="tab-shop" class="content-area">
-                <h1>Atelier <br><i>betreten.</i></h1>
-                <p>Hier kannst du deine persönlichen Unikate bestellen. Der Shop öffnet sich sicher in einem neuen Fenster.</p>
-                
-                <div class="feature-box" onclick="window.open('https://soulpaw.bigcartel.com', '_blank')">
-                    <div class="feature-icon"><i class="fas fa-shopping-bag"></i></div>
-                    <div>
-                        <strong style="display:block; font-family:'Fraunces', serif;">Zum Online Shop</strong>
-                        <span style="font-size:0.85rem; color:#999;">Externer Checkout (Big Cartel)</span>
-                    </div>
-                </div>
-
-                <div style="margin-top:30px; border-top:1px solid #eee; padding-top:20px;">
-                    <p style="font-size:0.8rem;">
-                        <i class="fas fa-heart" style="color:#d4a373;"></i> Handgefertigt in Köln.<br>
-                        <a href="impressum.html" style="color:#999; text-decoration:none;">Impressum</a>
-                    </p>
-                </div>
-            </div>
-
+            <a href="https://soulpaw.bigcartel.com" target="_blank" class="btn-shop">Im Shop konfigurieren</a>
         </div>
     </div>
 
     <script>
-        // BILDER WECHSELN JE NACH TAB (Optional: Füge hier eigene Bild-URLs ein)
-        const images = {
-            home: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=2070&auto=format&fit=crop", // Hund im Bett/Cozy
-            sound: "https://images.unsplash.com/photo-1534361960057-19889db9621e?q=80&w=2070&auto=format&fit=crop", // Glücklicher Hund draußen
-            astro: "https://images.unsplash.com/photo-1453227588063-bb302b62f50b?q=80&w=2070&auto=format&fit=crop", // Hund schaut in Himmel/Ruhig
-            shop: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=2688&auto=format&fit=crop"   // Detailaufnahme Pfote/Nase
+        const modal = document.getElementById('product-modal');
+        const mTitle = document.getElementById('m-title');
+        const mDesc = document.getElementById('m-desc');
+        const mExtra = document.getElementById('m-extra');
+
+        const content = {
+            tattoo: {
+                title: "Die Linie (Digital)",
+                desc: "Für die Ewigkeit unter der Haut.",
+                extra: "<ul><li>Du sendest uns das Audio (oder Video).</li><li>Wir zeichnen die Frequenz von Hand.</li><li>Du erhältst eine hochauflösende PDF & PNG für deinen Tätowierer.</li></ul>"
+            },
+            poster: {
+                title: "Fine Art Poster",
+                desc: "Das Statement-Piece für dein Zuhause.",
+                extra: "<b>Optionen:</b><br>• Mit QR-Code (Scan spielt Sound ab)<br>• Ohne QR-Code (Rein visuell)<br><br>Gedruckt auf 240g unbeschichtetem Design-Papier."
+            },
+            karma: {
+                title: "Karma Chart",
+                desc: "Verstehe das Wesen deines Hundes.",
+                extra: "Wir berechnen anhand der Geburtsdaten:<br>• Euren Archetyp<br>• Elemente-Balance<br>• Seelen-Farbe<br><br>Kommt als edler Print mit Gold-Veredelung."
+            }
         };
 
-        function openTab(tabName) {
-            // 1. Alle Inhalte ausblenden
-            document.querySelectorAll('.content-area').forEach(el => el.classList.remove('active'));
-            // 2. Gewählten Inhalt zeigen
-            document.getElementById('tab-' + tabName).classList.add('active');
-            
-            // 3. Buttons resetten
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            // 4. Aktiven Button highlighten (einfacher Trick: wir suchen den Button mit dem passenden onclick)
-            event.target.classList.add('active'); // Funktioniert beim Klick
-            
-            // 5. Bild sanft wechseln
-            const img = document.getElementById('hero-img');
-            img.style.opacity = 0;
-            setTimeout(() => {
-                img.src = images[tabName];
-                img.style.opacity = 1;
-            }, 300);
-            
-            // Fix für Button Active State wenn über Kacheln geklickt wird
-            updateNavState(tabName);
+        function openModal(type) {
+            mTitle.innerText = content[type].title;
+            mDesc.innerText = content[type].desc;
+            mExtra.innerHTML = content[type].extra;
+            modal.style.display = 'flex';
         }
 
-        function updateNavState(name) {
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                if(btn.innerText.toLowerCase().includes(name === 'home' ? 'start' : name)) {
-                   // btn.classList.add('active'); // Logik vereinfacht im Klick
-                }
-            })
+        function closeModal() {
+            modal.style.display = 'none';
         }
-
-        function calcLove() {
-            const d1 = document.getElementById('dateHuman').value;
-            const d2 = document.getElementById('dateDog').value;
-            if(!d1 || !d2) return alert("Bitte beide Daten eingeben ❤️");
-            
-            document.getElementById('astro-result').style.display = 'block';
-            document.getElementById('astro-result').scrollIntoView({behavior: "smooth"});
+        
+        // Klick außerhalb schließt Modal
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
         }
     </script>
 </body>
