@@ -3,390 +3,350 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SOULPAW | Atelier für Hundeliebe</title>
     
-    <title>SOULPAW | Handgefertigte Erinnerungen</title>
-    <meta name="description" content="Liebevolle Unikate für Hundeliebhaber. Dein Bellen als Kunstwerk & astrologische Seelenverbindung.">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@300;400;600&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,400&family=Mulish:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* --- THEMES: WARM & BOUTIQUE --- */
         :root {
-            /* Default (Sound) - Warmes Nachtblau & Gold */
-            --bg-color: #1e2029; /* Sanftes Dunkelblau statt hartem Schwarz */
-            --text-color: #fdfbf7;
-            --accent-color: #d4a373; /* Warmes Sand-Gold */
-            --accent-soft: rgba(212, 163, 115, 0.2);
-            --secondary-bg: #252833;
-            --card-bg: rgba(255,255,255,0.03);
-            --border-radius: 20px;
-            
-            --font-head: 'Playfair Display', serif;
-            --font-body: 'Quicksand', sans-serif;
-            --font-hand: 'Dancing Script', cursive;
+            --bg-body: #F2F0E9; /* Sehr warmes Hellgrau/Beige */
+            --bg-card: #FFFFFF;
+            --text-main: #5C554B; /* Weiches Dunkelbraun statt Schwarz */
+            --accent: #A68A64; /* Edles Camel/Gold */
+            --accent-soft: #E8E1D5;
+            --radius: 30px; /* Große, weiche Radien */
         }
 
-        body.astro-mode {
-            /* Astro - Papier & Terrakotta */
-            --bg-color: #f7f3e8; /* Warmes Papier-Weiß */
-            --text-color: #4a403a; /* Sanftes Braun statt Schwarz */
-            --accent-color: #bc6c25; /* Terrakotta / Erde */
-            --accent-soft: rgba(188, 108, 37, 0.1);
-            --secondary-bg: #efebde;
-            --card-bg: #fff;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* --- BASIS --- */
-        html { scroll-behavior: smooth; }
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.6s ease, color 0.4s ease, border-color 0.4s ease; }
-        
         body {
-            font-family: var(--font-body);
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            overflow-x: hidden;
-            line-height: 1.7;
-            font-weight: 400;
+            font-family: 'Mulish', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            height: 100vh; /* Volle Höhe */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Kein Scrollen der Hauptseite */
         }
-        body.modal-open { overflow: hidden; }
 
-        h1, h2, h3 { font-family: var(--font-head); font-weight: 700; }
-        .handwritten { font-family: var(--font-hand); color: var(--accent-color); font-size: 1.5em; display: inline-block; transform: rotate(-3deg); margin: 0 5px;}
+        /* --- LAYOUT CONTAINER (Die "Karte") --- */
+        .main-container {
+            width: 95%;
+            max-width: 1200px;
+            height: 90vh;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: 0 30px 60px rgba(92, 85, 75, 0.1);
+            display: grid;
+            grid-template-columns: 45% 55%; /* Links Bild, Rechts Inhalt */
+            overflow: hidden;
+            position: relative;
+        }
 
-        /* --- HEADER --- */
-        .header-bar {
-            position: fixed; top: 0; left: 0; width: 100%;
-            padding: 20px 5%; display: flex; justify-content: space-between; align-items: center;
-            z-index: 1000; background: transparent; transition: 0.3s;
+        /* --- LINKE SEITE: VISUAL --- */
+        .visual-side {
+            position: relative;
+            background-color: var(--accent-soft);
+            overflow: hidden;
         }
-        .header-bar.scrolled {
-            background: var(--bg-color); 
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-        }
-        .brand { font-family: var(--font-head); font-size: 1.5rem; font-weight: 700; letter-spacing: 1px; font-style: italic; }
         
-        .mode-switch-container { 
-            background: var(--card-bg);
-            padding: 5px; border-radius: 50px; border: 1px solid var(--accent-soft); 
-            display: flex; gap: 5px;
+        .visual-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
         }
-        .switch-btn { 
-            padding: 8px 16px; border-radius: 50px; border: none; cursor: pointer; 
-            font-size: 0.75rem; font-weight: 600; background: transparent; color: inherit; opacity: 0.5; font-family: var(--font-body);
+
+        /* Einzigartiges Detail: Ein "Sticker" auf dem Bild */
+        .brand-badge {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 25px;
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+            font-family: 'Fraunces', serif;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--text-main);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            z-index: 10;
+        }
+
+        /* --- RECHTE SEITE: INTERAKTION --- */
+        .content-side {
+            padding: 40px 60px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* NAVIGATION (Tabs oben) */
+        .nav-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            font-family: 'Mulish', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #999;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 20px;
+            transition: 0.3s;
+            text-transform: uppercase;
             letter-spacing: 1px;
         }
-        .switch-btn.active { background: var(--accent-color); color: #fff; opacity: 1; box-shadow: 0 2px 10px var(--accent-soft); }
 
-        /* --- MODAL (Willkommen) --- */
-        .welcome-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(30, 32, 41, 0.98); 
-            z-index: 9999; display: flex; align-items: center; justify-content: center;
-            padding: 20px;
+        .tab-btn.active {
+            background: var(--accent-soft);
+            color: var(--text-main);
         }
-        .modal-content-wrapper {
-            max-width: 900px; width: 100%; background: #fff; color: #333;
-            border-radius: 30px; overflow: hidden; box-shadow: 0 20px 80px rgba(0,0,0,0.5);
-            display: flex; flex-direction: column; text-align: center;
+        .tab-btn:hover { color: var(--accent); }
+
+        /* CONTENT AREA (Scrollbar nur hier drin, falls nötig) */
+        .content-area {
+            flex: 1;
+            overflow-y: auto; /* Scrollen nur im Textbereich */
+            padding-right: 10px; /* Platz für Scrollbar */
+            display: none; /* Standardmäßig ausgeblendet */
+            animation: fadeIn 0.5s ease;
         }
-        .modal-header { padding: 3rem 2rem 1rem; background: #f9f7f2; }
-        .modal-header h2 { font-size: 2.2rem; color: #333; margin-bottom: 0.5rem; }
-        .modal-header p { font-size: 1.1rem; color: #666; font-family: var(--font-body); }
+        .content-area.active { display: block; }
+
+        /* Scrollbar Styling */
+        .content-area::-webkit-scrollbar { width: 6px; }
+        .content-area::-webkit-scrollbar-thumb { background: #eee; border-radius: 10px; }
+
+        /* TYPOGRAPHY */
+        h1 {
+            font-family: 'Fraunces', serif;
+            font-size: 3rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            color: var(--text-main);
+            font-weight: 300;
+        }
+        h1 i { font-style: italic; color: var(--accent); }
         
-        .modal-grid { display: flex; flex-direction: row; }
-        .modal-choice { 
-            flex: 1; padding: 3rem 2rem; cursor: pointer; transition: 0.3s; position: relative;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px;
+        p { line-height: 1.8; color: #888; margin-bottom: 25px; font-size: 1.05rem; }
+
+        /* BUTTONS & CARDS */
+        .btn-primary {
+            display: inline-block;
+            background: var(--text-main);
+            color: #fff;
+            padding: 18px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(92, 85, 75, 0.2);
         }
-        .modal-choice:hover { background: #fdfbf7; }
-        
-        .choice-sound { border-right: 1px solid #eee; }
-        .choice-astro { }
+        .btn-primary:hover { transform: translateY(-3px); background: var(--accent); }
 
-        .modal-icon-bg {
-            width: 80px; height: 80px; background: #f4f4f4; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; transition: 0.3s;
+        .feature-box {
+            background: #FAFAFA;
+            border: 1px solid #EEE;
+            padding: 25px;
+            border-radius: 20px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: 0.3s;
+            cursor: pointer;
         }
-        .modal-choice:hover .modal-icon-bg { transform: scale(1.1); }
-
-        @media (max-width: 800px) { 
-            .modal-grid { flex-direction: column; } 
-            .choice-sound { border-right: none; border-bottom: 1px solid #eee; }
-            .modal-header h2 { font-size: 1.8rem; }
-        }
-
-        /* --- HERO --- */
-        .hero { min-height: 85vh; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; padding: 6rem 20px 2rem; }
-        .hero-bg-sound, .hero-bg-astro { position: absolute; top:0; left:0; width:100%; height:100%; z-index: -1; opacity: 0; transition: opacity 0.8s; }
-        /* Wir nutzen jetzt subtile Verläufe statt harter Farben */
-        .hero-bg-sound { background: radial-gradient(circle at top, #2c3e50 0%, #1e2029 100%); opacity: 1; }
-        body.astro-mode .hero-bg-sound { opacity: 0; }
-        body.astro-mode .hero-bg-astro { background: radial-gradient(circle at top, #fff 0%, #f0ebd8 100%); opacity: 1; }
-        
-        .hero-content { max-width: 700px; position: relative; z-index: 10; }
-        .hero h1 { font-size: 3.5rem; margin-bottom: 1.5rem; line-height: 1.2; font-style: italic;}
-        .subtitle { font-family: var(--font-body); font-size: 1.1rem; opacity: 0.9; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;}
-        
-        .cta-btn {
-            padding: 18px 45px; background: var(--accent-color); color: #fff; border: none; 
-            border-radius: 50px; font-weight: 600; text-transform: uppercase; font-size: 0.85rem; 
-            cursor: pointer; text-decoration: none; display: inline-block; letter-spacing: 2px;
-            box-shadow: 0 10px 30px var(--accent-soft); transition: 0.3s;
-        }
-        .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px var(--accent-soft); opacity: 0.9; }
-
-        /* --- SECTIONS --- */
-        .content-section { display: none; padding: 5rem 5%; }
-        .content-section.active { display: block; animation: fadeIn 1s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .handmade-badge {
-            display: inline-block; border: 1px solid var(--accent-color); color: var(--accent-color);
-            padding: 5px 15px; border-radius: 50px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;
+        .feature-box:hover { border-color: var(--accent); background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+        .feature-icon {
+            font-size: 1.5rem; color: var(--accent); background: #fff; 
+            width: 50px; height: 50px; border-radius: 50%; display: flex; 
+            align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
-        /* --- SHOWCASE / CARDS --- */
-        .showcase { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; margin-top: 4rem; }
-        .card { 
-            background: var(--card-bg); padding: 2.5rem; border-radius: var(--border-radius); 
-            text-align: center; border: 1px solid var(--accent-soft);
-            transition: 0.4s ease; position: relative;
-        }
-        .card:hover { transform: translateY(-10px); }
-        .card h3 { margin: 1.5rem 0 1rem; font-size: 1.5rem; }
-        .card p { opacity: 0.8; font-size: 0.95rem; margin-bottom: 1.5rem; }
-
-        .visual-container-common {
-            height: 280px; display: flex; align-items: center; justify-content: center;
-            background: rgba(0,0,0,0.03); border-radius: 15px; overflow: hidden; 
-            position: relative; margin-bottom: 1rem;
-        }
-        
-        /* Sound Wave Style - Weicher */
-        .waveform-path {
-            fill: none; stroke: var(--accent-color); stroke-width: 2px;
-            stroke-linecap: round; stroke-linejoin: round;
-        }
-        
-        /* Astro Style - Weicher */
-        .visual-astro { background: #fff; border: 1px dashed var(--accent-color); }
-
-        /* --- INPUTS & FORMS --- */
-        .astro-test {
-            background: var(--secondary-bg); padding: 3rem; border-radius: 30px;
-            margin: 4rem auto; text-align: center; max-width: 600px;
-        }
-        .input-wrapper { display: flex; gap: 20px; justify-content: center; margin: 30px 0; flex-wrap: wrap; }
-        .date-field { flex: 1; min-width: 220px; text-align: left;}
-        .date-field label { display: block; font-size: 0.8rem; margin-bottom: 8px; font-weight: 600; opacity: 0.7; letter-spacing: 1px;}
-        input[type="date"] { 
-            padding: 15px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1); width: 100%; 
-            font-size: 1rem; background: #fff; color: #333; font-family: var(--font-body); cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        /* INPUTS (Astro) */
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 5px; color: var(--accent); }
+        input[type="date"] {
+            width: 100%; padding: 15px; border-radius: 15px; border: 1px solid #eee;
+            font-family: 'Mulish', sans-serif; background: #fafafa;
         }
 
-        /* --- SHOP SECTION --- */
-        #order { text-align: center; padding: 6rem 5%; background: var(--secondary-bg); }
-        .shop-teaser { max-width: 600px; margin: 0 auto; background: var(--bg-color); padding: 3rem; border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.05); }
+        /* --- MOBILE OPTIMIERUNG --- */
+        @media (max-width: 900px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 35% 65%; /* Bild oben, Inhalt unten */
+                height: 100vh;
+                width: 100%;
+                border-radius: 0;
+            }
+            .brand-badge { top: 20px; left: 20px; padding: 10px 20px; font-size: 1rem; }
+            .content-side { padding: 30px 25px; border-radius: 30px 30px 0 0; margin-top: -30px; background: #fff; z-index: 10; }
+            h1 { font-size: 2rem; }
+            .nav-tabs { overflow-x: auto; white-space: nowrap; }
+        }
 
-        /* --- FOOTER --- */
-        footer { text-align: center; padding: 4rem 5% 2rem; border-top: 1px solid var(--accent-soft); opacity: 0.8; font-size: 0.9rem; }
-        .signature { font-family: var(--font-hand); font-size: 1.8rem; color: var(--accent-color); margin-top: 20px; display: block;}
-
-        /* --- HELPERS --- */
-        .heart-icon { color: #e74c3c; animation: beat 1.5s infinite; }
-        @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <div class="welcome-modal" id="welcome-modal">
-        <div class="modal-content-wrapper">
-            <div class="modal-header">
-                <span class="handmade-badge" style="border-color: #ccc; color: #666;">Willkommen bei Soulpaw</span>
-                <h2>Was verbindet dich mit deinem <span class="handwritten" style="color:#d4a373">Hund?</span></h2>
-                <p>Jede Freundschaft ist einzigartig. Wir machen sie sichtbar.</p>
-            </div>
-            <div class="modal-grid">
-                <div class="modal-choice choice-sound" onclick="switchModeAndCloseModal('sound')">
-                    <div class="modal-icon-bg"><i class="fas fa-wave-square" style="color: #1e2029; font-size: 1.5rem;"></i></div>
-                    <h3 style="color: #1e2029;">Die Stimme</h3>
-                    <p style="font-size:0.9rem; opacity:0.7;">Soundwave Art.<br>Das Bellen als ewiges Bild.</p>
-                </div>
-                <div class="modal-choice choice-astro" onclick="switchModeAndCloseModal('astro')">
-                    <div class="modal-icon-bg"><i class="fas fa-star" style="color: #bc6c25; font-size: 1.5rem;"></i></div>
-                    <h3 style="color: #bc6c25;">Die Seele</h3>
-                    <p style="font-size:0.9rem; opacity:0.7;">Astro & Aura.<br>Eure kosmische Verbindung.</p>
-                </div>
-            </div>
-            <div style="padding: 15px; background: #f9f9f9; font-size: 0.8rem; color: #999;">
-                <i class="fas fa-heart"></i> Handgefertigt in Deutschland
-            </div>
-        </div>
-    </div>
-
-    <div class="header-bar" id="header">
-        <div class="brand">Soulpaw <span style="font-size:0.5rem; text-transform:uppercase; opacity:0.6; font-family:sans-serif; letter-spacing:1px; margin-left:5px;">Atelier</span></div>
-        <div class="mode-switch-container">
-            <button class="switch-btn active" onclick="switchMode('sound')">Stimme</button>
-            <button class="switch-btn" onclick="switchMode('astro')">Seele</button>
-        </div>
-    </div>
-
-    <header class="hero">
-        <div class="hero-bg-sound"></div> <div class="hero-bg-astro"></div>
+    <div class="main-container">
         
-        <div class="hero-content" id="hero-sound">
-            <span class="handmade-badge">Manufaktur für Erinnerungen</span>
-            <h1>Eure Stimme.<br>Für die <span class="handwritten">Ewigkeit.</span></h1>
-            <p class="subtitle">Wir verwandeln das Bellen deines Seelenhundes in ein filigranes, handgezeichnetes Kunstwerk. Minimalistisch & Zeitlos.</p>
-            <a href="#content-sound" class="cta-btn">Unikat gestalten</a>
+        <div class="visual-side">
+            <div class="brand-badge"><i class="fas fa-paw"></i> Soulpaw</div>
+            <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=2070&auto=format&fit=crop" class="visual-img" id="hero-img">
         </div>
 
-        <div class="hero-content" id="hero-astro" style="display:none">
-            <span class="handmade-badge">Kosmische Verbindung</span>
-            <h1>Steht es in den <span class="handwritten">Sternen?</span></h1>
-            <p class="subtitle">Verstehe das Wesen deines Hundes. Unser Astro-Check berechnet eure Seelenverwandtschaft basierend auf euren Geburtsdaten.</p>
-            <a href="#content-astro" class="cta-btn">Verbindung prüfen</a>
-        </div>
-    </header>
-
-    <section id="content-sound" class="content-section active">
-        <div style="text-align:center; max-width:700px; margin:0 auto 4rem;">
-            <h2>Von Hand gezeichnet</h2>
-            <p style="margin-top:20px;">Kein automatischer Filter. Unsere Designer nehmen deine Audioaufnahme und zeichnen die Wellenform Linie für Linie nach, um den Charakter deines Hundes einzufangen.</p>
-        </div>
-
-        <div class="showcase">
-            <div class="card">
-                <div class="visual-container-common">
-                    <svg width="100%" height="100%" viewBox="0 0 200 100" preserveAspectRatio="none">
-                        <path class="waveform-path" d="M0,50 Q20,50 30,30 T50,50 T70,80 T100,20 T130,50 T160,50 T200,50" />
-                    </svg>
-                </div>
-                <h3>Tattoo Vorlage</h3>
-                <p>Deine Datei als feine Vektorgrafik. Perfekt für deinen Tätowierer, um die Stimme unter die Haut zu bringen.</p>
-                <a href="#order" class="cta-btn" style="padding:10px 25px; font-size:0.75rem;">Vorlage anfragen</a>
-            </div>
-
-            <div class="card">
-                <div class="visual-container-common">
-                    <i class="fas fa-image" style="font-size:3rem; opacity:0.3;"></i>
-                </div>
-                <h3>Fine Art Print</h3>
-                <p>Gedruckt auf schwerem, unbeschichtetem Museumspapier. Mit interaktivem QR-Code, der das Bellen abspielt.</p>
-                <a href="#order" class="cta-btn" style="padding:10px 25px; font-size:0.75rem;">Papier wählen</a>
-            </div>
-        </div>
-    </section>
-
-    <section id="content-astro" class="content-section">
-        <div style="text-align:center; max-width:700px; margin:0 auto;">
-            <h2>Eure Seelen-Formel</h2>
-            <p style="margin-top:20px;">Gib einfach eure Geburtstage ein. Wir berechnen manuell eure Elemente, Mondknoten und den Match-Score.</p>
-        </div>
-        
-        <div class="astro-test">
-            <h3><span class="handwritten">Harmonie</span> Check</h3>
+        <div class="content-side">
             
-            <div class="input-wrapper">
-                <div class="date-field"><label>Dein Geburtstag</label><input type="date" id="dateHuman"></div>
-                <div class="date-field"><label>Geburtstag des Hundes</label><input type="date" id="dateDog"></div>
-            </div>
+            <nav class="nav-tabs">
+                <button class="tab-btn active" onclick="openTab('home')">Start</button>
+                <button class="tab-btn" onclick="openTab('sound')">Stimme</button>
+                <button class="tab-btn" onclick="openTab('astro')">Sterne</button>
+                <button class="tab-btn" onclick="openTab('shop')">Shop</button>
+            </nav>
 
-            <div id="calc-loader" style="display:none; margin: 20px 0; color:var(--accent-color);">
-                <i class="fas fa-star fa-spin"></i> Verbinde Sternbilder...
-            </div>
-
-            <button id="calcBtn" class="cta-btn" onclick="calculateLove()">Kostenlos berechnen</button>
-
-            <div id="karma-result" style="display:none; margin-top:30px;">
-                <h3 style="color:var(--accent-color); font-size:2.5rem;">98% Match</h3>
-                <p style="font-weight:bold;">Ihr seid kosmische Seelenverwandte.</p>
-                <p style="font-size:0.9rem; margin-top:10px; opacity:0.8;">Die Position eurer Sonne deutet auf eine tiefe, intuitive Verbindung hin...</p>
+            <div id="tab-home" class="content-area active">
+                <h1>Willkommen <br><i>zuhause.</i></h1>
+                <p>Wir glauben, dass die Verbindung zu deinem Hund etwas Heiliges ist. In unserem kleinen Atelier in Köln fertigen wir Erinnerungen, die so einzigartig sind wie eure Freundschaft.</p>
+                <p>Was möchtest du heute entdecken?</p>
                 
-                <div style="margin-top:30px; padding:20px; background:rgba(255,255,255,0.5); border-radius:15px; border:1px dashed var(--accent-color);">
-                    <p style="font-size:0.9rem;">Möchtest du die vollständige Analyse als wunderschönes Poster?</p>
-                    <a href="#order" style="color:var(--accent-color); font-weight:bold; margin-top:10px; display:inline-block;">Zum Karma-Chart</a>
+                <div class="feature-box" onclick="openTab('sound')">
+                    <div class="feature-icon"><i class="fas fa-wave-square"></i></div>
+                    <div>
+                        <strong style="display:block; font-family:'Fraunces', serif;">Soundwave Art</strong>
+                        <span style="font-size:0.85rem; color:#999;">Verwandle Bellen in Kunst.</span>
+                    </div>
+                </div>
+
+                <div class="feature-box" onclick="openTab('astro')">
+                    <div class="feature-icon"><i class="fas fa-star"></i></div>
+                    <div>
+                        <strong style="display:block; font-family:'Fraunces', serif;">Astro & Aura</strong>
+                        <span style="font-size:0.85rem; color:#999;">Eure kosmische Verbindung.</span>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <section id="order">
-        <div class="shop-teaser">
-            <i class="fas fa-store-alt" style="font-size:3rem; color:var(--accent-color); margin-bottom:20px;"></i>
-            <h2>Besuche unser Atelier</h2>
-            <p>Um dir die höchste Sicherheit zu bieten, leiten wir dich für die Bestellung zu unserem verschlüsselten Shop weiter.</p>
-            <br>
-            <a href="https://soulpaw.bigcartel.com" target="_blank" class="cta-btn">Shop öffnen <i class="fas fa-arrow-right" style="font-size:0.8em; margin-left:5px;"></i></a>
-            <p style="font-size:0.8rem; margin-top:20px; opacity:0.6;">Dort kannst du auch Fotos & Audios hochladen.</p>
-        </div>
-    </section>
+            <div id="tab-sound" class="content-area">
+                <h1>Für immer <br><i>gehört werden.</i></h1>
+                <p>Das Bellen, das dich begrüßt, wenn du nach Hause kommst. Wir zeichnen diese Schallwelle von Hand nach und drucken sie auf feinstes Museumspapier.</p>
+                
+                <div style="background:#fdfbf7; padding:20px; border-radius:20px; margin-bottom:20px; text-align:center;">
+                    <svg width="100%" height="60" viewBox="0 0 200 60">
+                        <path d="M0,30 Q20,30 30,10 T50,30 T70,50 T100,10 T130,30 T160,30 T200,30" fill="none" stroke="#A68A64" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <small style="display:block; margin-top:10px; color:#A68A64;">Handgezeichnete Feinlinie</small>
+                </div>
 
-    <footer>
-        <p>"Hunde kommen in unser Leben, um uns beizubringen, wie man liebt."</p>
-        <span class="signature">Fabio & das Soulpaw Team</span>
-        <div style="margin-top:30px; font-size:0.8rem; opacity:0.5;">
-            &copy; 2024 Soulpaw. Handgefertigt in Köln. <br>
-            <a href="#" style="color:inherit; margin:0 5px;">Impressum</a> | <a href="#" style="color:inherit; margin:0 5px;">Datenschutz</a>
+                <a href="#" onclick="openTab('shop')" class="btn-primary">Unikat gestalten</a>
+            </div>
+
+            <div id="tab-astro" class="content-area">
+                <h1>Steht es in den <br><i>Sternen?</i></h1>
+                <p>Verrate uns eure Geburtstage. Unser kleiner Algorithmus "Cosmic Bond" berechnet, wie eure Seelen zusammenspielen.</p>
+                
+                <div style="background:#fff; padding:20px; border-radius:20px; border:1px solid #eee;">
+                    <div class="input-group">
+                        <label>Dein Geburtstag</label>
+                        <input type="date" id="dateHuman">
+                    </div>
+                    <div class="input-group">
+                        <label>Geburtstag der Fellnase</label>
+                        <input type="date" id="dateDog">
+                    </div>
+                    <button class="btn-primary" style="width:100%; padding:15px;" onclick="calcLove()">Verbindung berechnen</button>
+                </div>
+
+                <div id="astro-result" style="display:none; margin-top:20px; text-align:center;">
+                    <h2 style="font-family:'Fraunces'; color:var(--accent); font-size:2rem;">98% Match</h2>
+                    <p>Ihr seid Seelenverwandte. <br>Mehr dazu im Karma-Chart.</p>
+                </div>
+            </div>
+
+            <div id="tab-shop" class="content-area">
+                <h1>Atelier <br><i>betreten.</i></h1>
+                <p>Hier kannst du deine persönlichen Unikate bestellen. Der Shop öffnet sich sicher in einem neuen Fenster.</p>
+                
+                <div class="feature-box" onclick="window.open('https://soulpaw.bigcartel.com', '_blank')">
+                    <div class="feature-icon"><i class="fas fa-shopping-bag"></i></div>
+                    <div>
+                        <strong style="display:block; font-family:'Fraunces', serif;">Zum Online Shop</strong>
+                        <span style="font-size:0.85rem; color:#999;">Externer Checkout (Big Cartel)</span>
+                    </div>
+                </div>
+
+                <div style="margin-top:30px; border-top:1px solid #eee; padding-top:20px;">
+                    <p style="font-size:0.8rem;">
+                        <i class="fas fa-heart" style="color:#d4a373;"></i> Handgefertigt in Köln.<br>
+                        <a href="impressum.html" style="color:#999; text-decoration:none;">Impressum</a>
+                    </p>
+                </div>
+            </div>
+
         </div>
-    </footer>
+    </div>
 
     <script>
-        // Einfache Logik für den Wechsel und die Berechnung
-        
-        function switchModeAndCloseModal(mode) {
-            document.getElementById('welcome-modal').style.display = 'none';
-            document.body.classList.remove('modal-open');
-            switchMode(mode);
-        }
+        // BILDER WECHSELN JE NACH TAB (Optional: Füge hier eigene Bild-URLs ein)
+        const images = {
+            home: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?q=80&w=2070&auto=format&fit=crop", // Hund im Bett/Cozy
+            sound: "https://images.unsplash.com/photo-1534361960057-19889db9621e?q=80&w=2070&auto=format&fit=crop", // Glücklicher Hund draußen
+            astro: "https://images.unsplash.com/photo-1453227588063-bb302b62f50b?q=80&w=2070&auto=format&fit=crop", // Hund schaut in Himmel/Ruhig
+            shop: "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=2688&auto=format&fit=crop"   // Detailaufnahme Pfote/Nase
+        };
 
-        function switchMode(mode) {
-            const body = document.body;
-            const btns = document.querySelectorAll('.switch-btn');
+        function openTab(tabName) {
+            // 1. Alle Inhalte ausblenden
+            document.querySelectorAll('.content-area').forEach(el => el.classList.remove('active'));
+            // 2. Gewählten Inhalt zeigen
+            document.getElementById('tab-' + tabName).classList.add('active');
             
-            document.getElementById('hero-sound').style.display = (mode === 'sound') ? 'block' : 'none';
-            document.getElementById('hero-astro').style.display = (mode === 'astro') ? 'block' : 'none';
+            // 3. Buttons resetten
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            // 4. Aktiven Button highlighten (einfacher Trick: wir suchen den Button mit dem passenden onclick)
+            event.target.classList.add('active'); // Funktioniert beim Klick
             
-            document.getElementById('content-sound').classList.toggle('active', mode === 'sound');
-            document.getElementById('content-astro').classList.toggle('active', mode === 'astro');
-
-            btns.forEach(b => b.classList.remove('active'));
-
-            if(mode === 'astro') {
-                body.classList.add('astro-mode');
-                btns[1].classList.add('active');
-            } else {
-                body.classList.remove('astro-mode');
-                btns[0].classList.add('active');
-            }
-        }
-
-        function calculateLove() {
-            const hDate = document.getElementById('dateHuman').value;
-            const dDate = document.getElementById('dateDog').value;
-            
-            if(!hDate || !dDate) { 
-                alert("Bitte verrate uns erst beide Geburtstage."); 
-                return; 
-            }
-
-            // Fake Loading für "Berechnung"
-            document.getElementById('calcBtn').style.display = 'none';
-            document.getElementById('calc-loader').style.display = 'block';
-
+            // 5. Bild sanft wechseln
+            const img = document.getElementById('hero-img');
+            img.style.opacity = 0;
             setTimeout(() => {
-                document.getElementById('calc-loader').style.display = 'none';
-                document.getElementById('karma-result').style.display = 'block';
-            }, 2500);
+                img.src = images[tabName];
+                img.style.opacity = 1;
+            }, 300);
+            
+            // Fix für Button Active State wenn über Kacheln geklickt wird
+            updateNavState(tabName);
         }
 
-        // Modal Check beim Laden
-        window.addEventListener('load', () => {
-             // Optional: Modal immer zeigen zum Testen
-             // document.getElementById('welcome-modal').style.display = 'flex';
-        });
+        function updateNavState(name) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if(btn.innerText.toLowerCase().includes(name === 'home' ? 'start' : name)) {
+                   // btn.classList.add('active'); // Logik vereinfacht im Klick
+                }
+            })
+        }
+
+        function calcLove() {
+            const d1 = document.getElementById('dateHuman').value;
+            const d2 = document.getElementById('dateDog').value;
+            if(!d1 || !d2) return alert("Bitte beide Daten eingeben ❤️");
+            
+            document.getElementById('astro-result').style.display = 'block';
+            document.getElementById('astro-result').scrollIntoView({behavior: "smooth"});
+        }
     </script>
 </body>
 </html>
