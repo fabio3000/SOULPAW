@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waveform Stilisierer</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 { color: #333; }
+
+        .controls {
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 2px dashed #ccc;
+            border-radius: 4px;
+        }
+
+        input[type=file] {
+            margin-top: 10px;
+        }
+
+        .settings {
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            align-items: center;
+        }
+
+        canvas {
+            /* Das Canvas ist standardmäßig weiß, um den Ziel-Stil zu matchen */
+            background-color: white;
+            border: 1px solid #ddd;
+            max-width: 100%;
+            height: auto;
+            /* Wichtig für scharfe Linien auf hochauflösenden Displays */
+            image-rendering: pixelated; 
+        }
+        
+        /* Verstecktes Canvas für die Analyse */
+        #analysisCanvas {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Audio-Waveform Stilisierer</h1>
+    <p>Lade ein detailliertes Wellenform-Bild hoch (wie das graue Beispiel), um es in den minimalistischen Balken-Stil umzuwandeln.</p>
+
+    <div class="controls">
+        <input type="file" id="imageUpload" accept="image/png, image/jpeg">
+        
+        <div class="settings">
+            <label for="densitySlider">Dichte der Balken:</label>
+            <input type="range" id="densitySlider" min="5" max="30" value="12">
+            <span id="densityValue">Mittel</span>
+        </div>
+    </div>
+
+    <canvas id="outputCanvas" width="800" height="400"></canvas>
+    
+    <canvas id="analysisCanvas"></canvas>
+</div>
+
+
+<script>
+    const imageUpload = document.getElementById('imageUpload');
+    const outputCanvas = document.getElementById('outputCanvas');
+    const ctx = outputCanvas.getContext('2d');
+    const analysisCanvas = document.getElementById('analysisCanvas');
+    const analysisCtx = analysisCanvas.getContext('2d');
+    const densitySlider = document.getElementById('densitySlider');
+    const densityValueDisplay = document.getElementById('densityValue');
+
+    let uploadedImage = null;
+
+    // Event Listener für den Datei-Upload
+    imageUpload.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            uploadedImage = new Image();
+            uploadedImage.onload = function() {
+                processImage();
+            };
+            uploadedImage.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // Event Listener für den Dichte-Regler
+    densitySlider.addEventListener('input', function() {
+        // Update Text Label
+        let val = parseInt(this.value);
+        if(val < 10) densityValueDisplay.textContent = "Hoch";
+        else if(val > 20) densityValueDisplay.textContent = "Niedrig";
+        else densityValueDisplay.textContent = "Mittel";
+        
+        if (uploadedImage) {
+            processImage();
+        }
+    });
+
+    // Hauptfunktion zur Verarbeitung
+    function processImage() {
+        // 1. Analyse-Canvas vorbereiten
+        // Wir setzen die Größe auf die Originalgröße des Bildes für genaue Analyse
+        analysisCanvas.width = uploadedImage.width;
+        analysisCanvas.height = uploadedImage.height;
+        analysisCtx.drawImage(uploadedImage, 0, 0);
+
+        // Hole die rohen Pixeldaten (RGBA Werte für jeden Pixel)
+        const imageData = analysisCtx.getImageData(0, 0, analysisCanvas.width, analysisCanvas.height);
+        const data = imageData.data;
+        const width = analysisCanvas.width;
+        const height = analysisCanvas.height;
+
+        // 2. Parameter für das Abtasten
+        // 'step' bestimmt, wie viele Pixel wir überspringen (definiert durch Slider)
+        // Ein höherer Step bedeutet weniger Balken.
+        const step = parseInt(densitySlider.value); 
+        let amplitudes = [];
+
+        // Wir nehmen an, die Nulllinie (Stille) ist in der vertikalen Mitte des Bildes
+        const centerY = Math.floor(height / 2);
+
+        // 3. Die Kern-Schleife: Das Bild spaltenweise abtasten
+        for (let x = 0; x < width; x += step) {
+            let maxAmplitudeInColumn = 0;
+
+            // Wir scannen die aktuelle Spalte (x) von oben nach unten
+            for (let y = 0; y < height; y++) {
+                // Index im Pixel-Array finden (4 Werte pro Pixel: R, G, B, A)
+                const index = (y * width + x) * 4;
+                
+                // Wir schauen uns nur den Rot-Kanal an (reicht bei Graustufenbildern).
+                // R, G und B sind bei Grau fast identisch.
+                const brightness = data[index]; 
+
+                // THRESHOLD CHECK:
+                // Das graue Eingangsbild hat einen dunklen Hintergrund und eine hellere Welle.
+                // Wir prüfen, ob der Pixel hell genug ist, um zur Welle zu gehören.
+                // Ein Wert von > 50 filtert das ganz dunkle Grau des Hintergrunds raus.
+                if (brightness > 60) {
+                    // Berechne den Abstand zur Mittellinie (absolute Amplitude)
+                    const distanceFromCenter = Math.abs(y - centerY);
+                    if (distanceFromCenter > maxAmplitudeInColumn) {
+                        maxAmplitudeInColumn = distanceFromCenter;
+                    }
+                }
+            }
+            // Speichere die maximale Auslenkung für diese Spalte
+            // Wir normalisieren sie auf einen Wert zwischen 0.0 und 1.0 relativ zur halben Höhe
+            amplitudes.push(maxAmplitudeInColumn / centerY);
+        }
+
+
+        // 4. Zeichnen des Ergebnisses
+        drawStylizedWave(amplitudes);
+    }
+
+
+    function drawStylizedWave(amplitudes) {
+        // Canvas leeren
+        ctx.clearRect(0, 0, outputCanvas.width, outputCanvas.height);
+
+        const numBars = amplitudes.length;
+        // Berechne die Breite eines einzelnen Balkens und der Lücke basierend auf der Canvas-Breite
+        const totalAvailableWidth = outputCanvas.width;
+        const stepWidth = totalAvailableWidth / numBars;
+        
+        // Der Balken selbst ist etwas dünner als der verfügbare Platz (für die Lücke)
+        const barWidth = stepWidth * 0.5; 
+        
+        const targetCenterY = outputCanvas.height / 2;
+
+        // STIL DEFINIEREN
+        ctx.fillStyle = 'black';
+        ctx.lineCap = 'round'; // WICHTIG: Macht die Enden rund
+
+        amplitudes.forEach((amp, index) => {
+            // X-Position berechnen
+            const xPos = (index * stepWidth) + (stepWidth / 2);
+
+            // Höhe berechnen: Wir skalieren die Amplitude auf die Canvas-Höhe.
+            // * 0.9 sorgt für etwas Abstand (Padding) oben und unten.
+            let barHeight = amp * outputCanvas.height * 0.9;
+            
+            // Verhindern, dass Balken ganz verschwinden bei Stille (Minimale Höhe)
+            if (barHeight < barWidth) barHeight = barWidth;
+
+            // Zeichne den Balken mit abgerundeten Enden
+            ctx.beginPath();
+            ctx.lineWidth = barWidth;
+            ctx.strokeStyle = 'black';
+            // Von der Mitte nach oben
+            ctx.moveTo(xPos, targetCenterY - (barHeight / 2));
+            // Zur Mitte nach unten
+            ctx.lineTo(xPos, targetCenterY + (barHeight / 2));
+            ctx.stroke();
+        });
+    }
+</script>
+
+</body>
+</html>
